@@ -1,27 +1,108 @@
-# Optician
+# 👓 Optician Landing Page
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+Welcome to the **Optician Landing Page** a sleek, responsive, and modern website designed for optical businesses to showcase their services, products, and offers with a professional web presence.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 🌐 Live Demo
 
-## Code scaffolding
+>  [Visit Website](# 👓 Optician Landing Page
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Welcome to the **Optician Landing Page** – a sleek, responsive, and modern website designed for optical businesses to showcase their services, products, and offers with a professional web presence.
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## 🌐 Live Demo
 
-## Running unit tests
+> Coming Soon OR [Visit Website](dev.opticians.pk)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
+## 📁 Project Structure
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+)
 
-## Further help
+---
+## 📁 Project Structure
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+optician-landing-page/
+│
+
+├── index.html
+
+
+├── /assets
+
+│ ├── /images
+
+│ └── /css
+
+│ └── style.css
+
+│
+
+├── /components # Reusable UI Components (if applicable)
+
+├── /scripts # JavaScript files
+
+├── /app # Angular/React/Vue source (if used)
+
+└── README.md
+
+
+---
+
+## 🚀 Features
+
+- Fully responsive layout
+- Eye-catching hero section
+- Services & pricing showcase
+- Contact form integration
+- Modern UI design with animations
+- SEO-friendly structure
+- Lightweight and fast-loading
+
+---
+
+## 🛠️ Tech Stack
+
+| Tech            | Description                           |
+|-----------------|---------------------------------------|
+| HTML5 / CSS3    | Markup and styling                    |
+| JavaScript      | Interactivity (vanilla or framework) |
+| Bootstrap / Tailwind | Styling framework (if used)         |
+| Angular / React (Optional) | If it’s SPA based              |
+
+---
+
+## 📦 Installation
+
+Clone the repository and run locally:
+
+git clone https://github.com/MalickMuzamil/optician-landing-page.git
+cd optician-landing-page
+
+Open index.html in your browser
+
+If it's built with Angular:
+
+npm install
+1- ng serve
+
+2- 🧪 Testing
+
+**Not applicable for static sites. For frameworks, use**:
+
+# Angular example
+1- ng test
+
+
+### 📄 License
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+### ✍️ Author
+Developed with ❤️ by Malick Muzamil
+
+### 🤝 Contributing
+Contributions, issues and feature requests are welcome!<br>
+Feel free to check the issues page.
