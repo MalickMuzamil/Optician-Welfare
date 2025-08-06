@@ -4,7 +4,7 @@ Welcome to the **Optician Landing Page** a sleek, responsive, and modern website
 
 ## 🌐 Live Demo
 
-> Coming Soon OR [Visit Website](dev.opticians.pk)
+> Coming Soon OR [Visit Website](https://dev.opticians.pk/)
 
 
 ## 📁 Project Structure
