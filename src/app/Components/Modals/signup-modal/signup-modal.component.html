@@ -1,0 +1,154 @@
+<div
+  class="modal fade"
+  id="signupModal"
+  tabindex="-1"
+  aria-labelledby="signupModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header border">
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="row align-items-center">
+          <div
+            class="col-md-6 border-end pe-4 d-none d-md-flex justify-content-center align-items-center"
+          >
+            <img
+              src="assets/Modal/ModalImage.jpeg"
+              alt="Expo Poster"
+              class="img-fluid rounded"
+            />
+          </div>
+
+          <div class="col-12 col-md-6 ps-md-4">
+            <div class="mb-3 text-center text-md-start" *ngIf="latestEvent">
+              <h4 class="fw-bold title display-6 mb-1">
+                {{ latestEvent.title || "Expo" }}
+              </h4>
+
+              <p class="mb-1 sub-heading fw-semibold">
+                {{
+                  getFormattedDateRange(
+                    latestEvent?.eventDateFrom,
+                    latestEvent?.eventDateTo
+                  )
+                }}
+              </p>
+
+              <p class="mb-3 sub-heading fw-semibold">
+                Venue: {{ latestEvent.address }}
+              </p>
+            </div>
+
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+              <div class="mb-3">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Company Name"
+                  formControlName="companyName"
+                />
+              </div>
+
+              <div class="mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Name"
+                  formControlName="fullName"
+                />
+              </div>
+
+              <div class="mb-2">
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="gender"
+                    value="Male"
+                  />
+                  <label class="form-check-label">Male</label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input
+                    class="form-check-input"
+                    type="radio"
+                    formControlName="gender"
+                    value="Female"
+                  />
+                  <label class="form-check-label">Female</label>
+                </div>
+              </div>
+
+              <div class="mb-2">
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Email"
+                  formControlName="email"
+                />
+              </div>
+
+              <div class="mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Phone Number"
+                  formControlName="phoneNo"
+                />
+              </div>
+
+              <div class="mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Address"
+                  formControlName="address"
+                />
+              </div>
+
+              <div class="mb-2">
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="City"
+                  formControlName="city"
+                />
+              </div>
+
+              <div class="mb-3" *ngIf="latestEvent?.paid">
+                <input
+                  type="file"
+                  class="form-control"
+                  id="imageInput"
+                  #imageInput
+                  (change)="onFileSelected($event)"
+                  placeholder="Upload Payment Proof"
+                  accept="image/*"
+                />
+                <small class="text-danger"
+                  >Please upload a clear image of your payment receipt.</small
+                >
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-success w-100 fw-bold"
+                [disabled]="signupForm.invalid"
+              >
+                Submit Registration
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

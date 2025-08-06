@@ -1,0 +1,7 @@
+.nav-link{
+    color : white !important;
+}
+
+:host ::ng-deep .offcanvas-backdrop {
+  position: relative !important;
+}

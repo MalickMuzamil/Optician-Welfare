@@ -1,0 +1,31 @@
+.title {
+  color: #003366;
+}
+
+.sub-heading {
+  color: #003366;
+}
+
+.custom-card {
+  position: static;
+}
+
+/* Mobile screens (max-width: 576px) */
+@media (max-width: 576px) {
+  .card-body > .d-flex.justify-content-end {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    gap: 0.5rem;
+  }
+
+  .card-body > .d-flex.justify-content-end button {
+    flex: none !important;
+    width: auto !important;
+  }
+}
+
+@media (min-width: 577px) {
+  .card-body > .d-flex.justify-content-end {
+    gap: 1rem;
+  }
+}

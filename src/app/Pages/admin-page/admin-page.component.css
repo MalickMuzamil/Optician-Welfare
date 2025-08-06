@@ -1,0 +1,42 @@
+.title {
+  color: #003366;
+}
+
+.sub-heading {
+  color: #003366;
+}
+.btn-small {
+  font-size: 12px;
+  padding: 2px 8px;
+  line-height: 1.2;
+}
+
+@media (max-width: 767.98px) {
+  .filter-bar {
+    flex-wrap: nowrap !important; /* ensure no wrapping */
+  }
+
+  .filter-bar select,
+  .filter-bar button {
+    font-size: 0.875rem;
+    padding: 0.3rem 0.6rem;
+    white-space: nowrap;
+    max-width: 75%;
+  }
+
+  .filter-bar button {
+    flex-shrink: 0;
+  }
+
+  .filter-bar .bi {
+    font-size: 1rem;
+  }
+}
+
+select.form-select {
+  padding-right: 2.5rem !important;
+}
+
+td {
+  font-size: 13px;
+}

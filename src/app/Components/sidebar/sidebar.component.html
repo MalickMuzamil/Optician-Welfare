@@ -1,0 +1,142 @@
+<div
+  class="d-none sidebar  d-md-block text-white p-3 pt-4 position-relative"
+  style="
+    width: 250px;
+    background-color: #003366 !important;
+    overflow-y: auto;
+    height: 100vh;
+  "
+>
+  <div class="text-center mb-4 pb-3">
+    <img
+      src="assets/Logo/Logo.png"
+      alt="Logo"
+      class="img-fluid mb-2"
+      style="max-height: 150px; margin-top: -16px;"
+      
+    />
+
+    <h5 class="text-white fw-bold mb-1 fs-3">ADMIN PANEL</h5>
+    <p class="text-white-50 fw-semibold mb-0" style="font-size: 14px">
+      {{ adminEmail }}
+    </p>
+  </div>
+  <ul class="nav flex-column gap-2">
+    <li class="nav-item">
+      <a
+        class="nav-link text-white"
+        routerLink="/registrations"
+        routerLinkActive="active bg-secondary text-white rounded"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Registrations
+      </a>
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link text-white"
+        routerLink="/events"
+        routerLinkActive="active bg-secondary text-white rounded"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Events
+      </a>
+    </li>
+    <!-- <li class="nav-item">
+      <a
+        class="nav-link text-white"
+        routerLink="/users"
+        routerLinkActive="active bg-secondary text-white rounded"
+        [routerLinkActiveOptions]="{ exact: true }"
+      >
+        Log
+      </a>
+    </li> -->
+  </ul>
+
+  <div class="position-absolute bottom-0 start-0 w-100 p-3">
+    <a class="btn btn-danger w-100 fw-semibold" (click)="openLogoutModal()">
+      Logout
+    </a>
+  </div>
+</div>
+
+<div
+  class="offcanvas offcanvas-start text-white"
+  tabindex="-1"
+  id="sidebarOffcanvas"
+  style="background-color: #003366; overflow-y: auto;"
+>
+  <div
+    class="offcanvas-header w-100 d-flex align-items-center justify-content-between"
+  >
+    <div>
+      <img
+        src="assets/Logo/Logo.png"
+        alt="Logo"
+        class="img-fluid mb-1"
+        style="max-height: 150px;"
+      />
+
+      <h5 class="offcanvas-title text-white mb-0 mt-2">Admin Panel</h5>
+      <small class="text-white-50 fw-medium">{{ adminEmail }}</small>
+    </div>
+    <button
+      type="button"
+      class="btn-close btn-close-white"
+      data-bs-dismiss="offcanvas"
+    ></button>
+  </div>
+
+  <div class="offcanvas-body d-flex flex-column justify-content-between">
+    <ul class="nav flex-column gap-2">
+      <li class="nav-item">
+        <a
+          class="nav-link text-white"
+          routerLink="/registrations"
+          routerLinkActive="active bg-secondary text-white rounded"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Registrations
+        </a>
+      </li>
+      <li class="nav-item">
+        <a
+          class="nav-link text-white"
+          routerLink="/events"
+          routerLinkActive="active bg-secondary text-white rounded"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Events
+        </a>
+      </li>
+      <!-- <li class="nav-item">
+        <a
+          class="nav-link text-white"
+          routerLink="/users"
+          routerLinkActive="active bg-secondary text-white rounded"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Log
+        </a>
+      </li> -->
+    </ul>
+
+    <a
+      class="btn btn-danger w-100 mt-3 fw-semibold"
+      (click)="openLogoutModal()"
+    >
+      Logout
+    </a>
+  </div>
+</div>
+
+<app-dailog-box
+  [visible]="showLogoutModal"
+  [title]="'Logout Confirmation'"
+  [message]="'Are you sure you want to logout?'"
+  [confirmText]="'Yes, Logout'"
+  [cancelText]="'Cancel'"
+  (confirm)="handleLogoutConfirm()"
+  (cancel)="handleLogoutCancel()"
+></app-dailog-box>

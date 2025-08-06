@@ -1,0 +1,15 @@
+.btn-primary {
+  background-color: #003366 !important;
+  border-color: #003366 !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+  background-color: #050988 !important;
+}
+
+
+[id] {
+  scroll-margin-top: 150px;
+}

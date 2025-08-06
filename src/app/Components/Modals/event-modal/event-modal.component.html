@@ -1,0 +1,111 @@
+<form (ngSubmit)="onSubmit()" [formGroup]="eventForm" novalidate>
+  <div class="mb-3">
+    <label for="title" class="form-label">Title</label>
+    <input
+      type="text"
+      id="title"
+      class="form-control"
+      formControlName="title"
+      placeholder="Event Title"
+      required
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Description</label>
+    <textarea
+      id="description"
+      class="form-control"
+      formControlName="description"
+      rows="3"
+      placeholder="Event Description"
+      required
+    ></textarea>
+  </div>
+
+  <div class="mb-3">
+    <label for="address" class="form-label">Address</label>
+    <input
+      type="text"
+      id="address"
+      class="form-control"
+      formControlName="address"
+      placeholder="Event Address"
+      required
+    />
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label for="eventDateFrom" class="form-label">Event Date From</label>
+      <input
+        type="date"
+        id="eventDateFrom"
+        class="form-control"
+        formControlName="eventDateFrom"
+        required
+      />
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="eventDateTo" class="form-label">Event Date To</label>
+      <input
+        type="date"
+        id="eventDateTo"
+        class="form-control"
+        formControlName="eventDateTo"
+        required
+      />
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <label for="eventTimeFrom" class="form-label">Event Time From</label>
+      <input
+        type="time"
+        id="eventTimeFrom"
+        class="form-control"
+        formControlName="eventTimeFrom"
+        required
+      />
+    </div>
+    <div class="col-md-6 mb-3">
+      <label for="eventTimeTo" class="form-label">Event Time To</label>
+      <input
+        type="time"
+        id="eventTimeTo"
+        class="form-control"
+        formControlName="eventTimeTo"
+        required
+      />
+    </div>
+  </div>
+
+  <div class="form-check mb-3">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      id="latest"
+      formControlName="latest"
+    />
+    <label class="form-check-label" for="latest"> Mark as Latest </label>
+  </div>
+
+  <div class="form-check mb-3">
+    <input
+      class="form-check-input"
+      type="checkbox"
+      id="paid"
+      formControlName="paid"
+    />
+    <label class="form-check-label" for="paid"> Paid Event </label>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-primary w-100"
+    [disabled]="eventForm.invalid || loading"
+  >
+   {{ isEditMode ? 'Update' : 'Create' }}
+  </button>
+</form>

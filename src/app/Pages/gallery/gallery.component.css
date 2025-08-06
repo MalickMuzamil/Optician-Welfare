@@ -1,0 +1,17 @@
+.gallery-wrapper {
+  margin-top: 50px;
+
+  @media (min-width: 992px) {
+    margin-top: 140px;
+  }
+}
+
+.title {
+  color: #003366;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+}
+
+
+.responsive-subtitle {
+  font-size: clamp(0.8rem, 2.5vw, 1.2rem);
+}

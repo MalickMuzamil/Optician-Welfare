@@ -1,0 +1,24 @@
+/* Carousel item full height */
+.carousel-item,
+.carousel-slide-wrapper {
+  height: 100vh;
+  position: relative;
+}
+
+/* Image settings */
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: -1;
+}
+
+@media (max-width: 768px) {
+  .hero-bg {
+    transform: scale(1);
+  }
+}

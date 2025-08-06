@@ -1,0 +1,115 @@
+<div class="d-md-none p-3">
+  <button
+    class="btn btn-outline-dark bg-white"
+    type="button"
+    data-bs-toggle="offcanvas"
+    data-bs-target="#sidebarOffcanvas"
+  >
+    <i class="bi bi-list fs-4 text-dark"></i>
+  </button>
+</div>
+
+<div class="d-flex" style="height: 100vh; overflow: hidden">
+  <app-sidebar
+    style="position: sticky; top: 0; height: 100vh; flex-shrink: 0"
+  ></app-sidebar>
+
+  <div class="flex-grow-1 p-4 d-flex flex-column w-100">
+    <h2 class="mb-4 title fw-bold">Registration</h2>
+
+    <div
+      class="mb-4 d-flex justify-content-between align-items-start flex-nowrap gap-2 filter-bar"
+    >
+      <div>
+        <select class="form-select mb-3" (change)="onEventSelected($event)">
+          <option selected>Select Event</option>
+          <option *ngFor="let event of uniqueEvents" [value]="event.eventId">
+            {{ event.eventTitle }}
+          </option>
+        </select>
+      </div>
+
+      <button class="btn btn-success fw-semibold" (click)="exportToCSV()">
+        <i class="bi bi-download me-2"></i> Export
+      </button>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>City</th>
+            <th>Company</th>
+            <th>Phone</th>
+            <th>Event</th>
+            <th>Receipt</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let reg of registrations">
+            <td>{{ reg.fullName }}</td>
+            <td>{{ reg.gender }}</td>
+            <td>{{ reg.city }}</td>
+            <td>{{ reg.companyName }}</td>
+            <td>{{ reg.phoneNo || "-" }}</td>
+            <td>{{ reg.eventTitle }}</td>
+            <td>
+              <ng-container *ngIf="reg.receiptFileLink; else noReceipt">
+                <a
+                  [href]="reg.receiptFileLink"
+                  target="_blank"
+                  [attr.download]="getFileName(reg.receiptFileLink)"
+                >
+                  {{ getFileName(reg.receiptFileLink) }}
+                </a>
+              </ng-container>
+              <ng-template #noReceipt>
+                <span class="text-muted">N/A</span>
+              </ng-template>
+            </td>
+            <td>
+              <span [class]="reg.status ? 'text-success' : 'text-danger'">
+                {{ reg.status ? "Confirmed" : "Not Confirmed" }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-sm btn-small"
+                [ngClass]="reg.status ? 'btn-success' : 'btn-danger'"
+                [disabled]="reg.status"
+                (click)="openConfirmDialog(reg)"
+              >
+                {{ reg.status ? "Confirmed" : "Not Confirmed" }}
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
+
+<app-dailog-box
+  [visible]="showConfirmDialog"
+  [title]="'Confirm Registration'"
+  [message]="
+    'Are you sure you want to confirm registration for ' +
+    (selectedRegistration?.fullName || '') +
+    '?'
+  "
+  [confirmText]="'Confirm'"
+  [cancelText]="'Cancel'"
+  (confirm)="confirmRegistration()"
+  (cancel)="cancelConfirm()"
+></app-dailog-box>

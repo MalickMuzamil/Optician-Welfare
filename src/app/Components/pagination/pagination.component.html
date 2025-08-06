@@ -1,0 +1,25 @@
+<nav *ngIf="totalPages > 0" class="mt-4 d-flex justify-content-end">
+  <ul class="pagination flex-wrap justify-content-center gap-1">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <button class="page-link" (click)="changePage(currentPage - 1)">
+        Previous
+      </button>
+    </li>
+
+    <li
+      class="page-item"
+      *ngFor="let page of [].constructor(totalPages); let i = index"
+      [class.active]="currentPage === i + 1"
+    >
+      <button class="page-link btn-primary" (click)="changePage(i + 1)">
+        {{ i + 1 }}
+      </button>
+    </li>
+
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <button class="page-link" (click)="changePage(currentPage + 1)">
+        Next
+      </button>
+    </li>
+  </ul>
+</nav>
