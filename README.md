@@ -1,28 +1,12 @@
 # 👓 Optician Landing Page
 
-Welcome to the **Optician Landing Page** a sleek, responsive, and modern website designed for optical businesses to showcase their services, products, and offers with a professional web presence.
-
----
-
-## 🌐 Live Demo
-
->  [Visit Website](# 👓 Optician Landing Page
-
-Welcome to the **Optician Landing Page** – a sleek, responsive, and modern website designed for optical businesses to showcase their services, products, and offers with a professional web presence.
-
----
+Welcome to the **Optician Landing Page** a sleek, responsive, and modern website designed for optical businesses to showcase their services, products, and offers with a professional web presence
 
 ## 🌐 Live Demo
 
 > Coming Soon OR [Visit Website](dev.opticians.pk)
 
----
 
-## 📁 Project Structure
-
-)
-
----
 ## 📁 Project Structure
 
 optician-landing-page/
@@ -49,8 +33,6 @@ optician-landing-page/
 
 └── README.md
 
-
----
 
 ## 🚀 Features
 
@@ -87,6 +69,7 @@ Open index.html in your browser
 If it's built with Angular:
 
 npm install
+
 1- ng serve
 
 2- 🧪 Testing
