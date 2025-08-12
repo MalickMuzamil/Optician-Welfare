@@ -192,7 +192,7 @@
           <div class="col-12 col-md-4">
             <div class="rounded overflow-hidden shadow-sm">
               <img
-                src="assets/Carousal/Gallery/Image1.jpeg"
+                src="assets/Carousal/Gallery/Image4.jpeg"
                 alt="Expo 2024 Image 1"
                 class="img-fluid w-100"
               />
@@ -346,15 +346,29 @@
 
       <!-- Upcoming Events -->
       <h6 class="fw-bold title fs-3">Upcoming Events</h6>
-      <div>
+
+      <div *ngIf="upcomingEvents.length > 0; else comingSoon">
         <div
-          class="border p-3 rounded text-center"
+          class="border p-3 rounded text-center mb-2"
           style="background-color: #e0ffd1"
+          *ngFor="let event of upcomingEvents.slice(0, 3)"
         >
-          <p class="mb-0 sub-heading">
-            Opticians Training<br />
-            <small class="sub-heading">Available Now!</small>
-          </p>
+          <div
+            class="border p-3 rounded mb-3 shadow-sm"
+            style="background-color: #f4fdf0"
+          >
+            <h5 class="fw-semibold title mb-1">{{ event.title }}</h5>
+            <p class="mb-1 text-muted">
+              <i class="bi bi-geo-alt-fill me-1"></i>{{ event.address }}
+            </p>
+            <p class="mb-0 text-secondary small">
+              <i class="bi bi-calendar-event me-1"></i>
+              From:
+              {{
+                getFormattedDateRange(event.eventDateFrom, event.eventDateTo)
+              }}
+            </p>
+          </div>
         </div>
       </div>
 

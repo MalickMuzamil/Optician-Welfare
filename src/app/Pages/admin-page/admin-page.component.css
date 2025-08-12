@@ -13,7 +13,7 @@
 
 @media (max-width: 767.98px) {
   .filter-bar {
-    flex-wrap: nowrap !important; /* ensure no wrapping */
+    flex-wrap: nowrap !important;
   }
 
   .filter-bar select,
@@ -40,3 +40,39 @@ select.form-select {
 td {
   font-size: 13px;
 }
+
+.receipt-icon-link {
+  font-size: 13px;
+  color: #003366;
+  text-decoration: none;
+}
+
+.receipt-icon-link:hover {
+  text-decoration: underline;
+  color: #003366;
+}
+
+.receipt-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.receipt-modal-content {
+  background: white;
+  padding: 20px;
+  width: 80%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+

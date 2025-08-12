@@ -24,15 +24,20 @@
   }
 }
 
-.custom-dropdown{
-  position: absolute;
+.custom-dropdown {
   background: white;
   width: 90%;
 }
 
-nav.d-lg-none > div.position-fixed {
-  background-color: #fff !important;
-  z-index: 1050;
-  /* optionally add box-shadow if needed */
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+.bg-transparent {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.custom-menue {
+  position: fixed;
+  top: 70px;
+  left: 5%;
+  width: 80%;
+  z-index: 1051;
 }

@@ -6,6 +6,7 @@ import { PaginationComponent } from '../../Components/pagination/pagination.comp
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { DailogBoxComponent } from '../../Components/dailog-box/dailog-box.component'; // add dialog box import
+import { DownloadReciptComponent } from '../download-recipt/download-recipt.component';
 
 @Component({
   selector: 'app-admin-page',
@@ -16,6 +17,7 @@ import { DailogBoxComponent } from '../../Components/dailog-box/dailog-box.compo
     PaginationComponent,
     FormsModule,
     DailogBoxComponent,
+    DownloadReciptComponent,
   ],
   templateUrl: './admin-page.component.html',
   styleUrls: ['./admin-page.component.css'],
@@ -146,39 +148,161 @@ export class AdminPageComponent implements OnInit {
 
   // ====== CSV Export Function ======
   exportToCSV() {
-    if (!this.registrations || this.registrations.length === 0) {
-      Swal.fire('No data to export');
+    // 1. Agar event select nahi kiya
+    if (!this.selectedEventId) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Event Selected',
+        text: 'Please select an event to export.',
+      });
       return;
     }
 
-    const headers = ['Name', 'Gender', 'City', 'Company', 'Event', 'Status'];
+    // 2. Event ka title nikal ke console me print karo
+    const selectedEvent = this.uniqueEvents.find(
+      (e) => e.eventId === this.selectedEventId
+    );
+    console.log('Selected Event ID:', this.selectedEventId);
+    console.log('Selected Event Title:', selectedEvent?.eventTitle);
 
-    const rows = this.registrations.map((reg) => [
-      `"${reg.fullName}"`,
-      `"${reg.gender}"`,
-      `"${reg.city}"`,
-      `"${reg.companyName}"`,
-      `"${reg.eventTitle}"`,
-      `"${reg.status ? 'Confirmed' : 'Not Confirmed'}"`,
-    ]);
+    // 3. Backend se sirf selected event ka data lana
+    const payload = {
+      pagination: { page: 1, size: 10000 }, // Export ke liye large size
+      eventId: this.selectedEventId,
+    };
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map((r) => r.join(',')),
-    ].join('\n');
+    this.generalService
+      .post('/eventtregistration/getRegisteredUsers', payload)
+      .subscribe({
+        next: (response) => {
+          const data = response.payload?.items || [];
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.setAttribute('download', 'Opticians-Registration.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+          if (data.length === 0) {
+            Swal.fire({
+              icon: 'info',
+              title: 'No Data',
+              text: 'No registrations found for the selected event.',
+            });
+            return;
+          }
+
+          // 4. CSV banani
+          const headers = [
+            'Name',
+            'Gender',
+            'City',
+            'Company',
+            'Email',
+            'Event',
+            'Status',
+          ];
+
+          const rows = data.map((reg: any) => [
+            `"${reg.fullName}"`,
+            `"${reg.gender}"`,
+            `"${reg.city}"`,
+            `"${reg.companyName}"`,
+            `"${reg.email}"`,
+            `"${reg.eventTitle}"`,
+            `"${reg.status ? 'Confirmed' : 'Not Confirmed'}"`,
+          ]);
+
+          const csvContent = [
+            headers.join(','),
+            ...rows.map((r: any) => r.join(',')),
+          ].join('\n');
+
+          // 5. Download CSV
+          const blob = new Blob([csvContent], {
+            type: 'text/csv;charset=utf-8;',
+          });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          const fileName = selectedEvent
+            ? `${selectedEvent.eventTitle.replace(
+                /\s+/g,
+                '_'
+              )}_Registrations.csv`
+            : 'Registrations.csv';
+          a.setAttribute('download', fileName);
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          console.error('Failed to fetch data for export:', err);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to export registrations. Please try again later.',
+          });
+        },
+      });
   }
 
   getFileName(url: string): string {
     return url?.split('/').pop() || '';
+  }
+
+  selectedReceiptLink: string | null = null;
+
+  openReceipt(link: string) {
+    this.selectedReceiptLink = link;
+  }
+
+  closeReceipt() {
+    this.selectedReceiptLink = null;
+  }
+
+  downloadReceipt(event: MouseEvent) {
+    event.stopPropagation();
+
+    if (!this.selectedReceiptLink) {
+      Swal.fire({
+        icon: 'warning',
+        title: 'No Receipt Selected',
+        text: 'Please select a receipt to download.',
+      });
+      return;
+    }
+
+    fetch(this.selectedReceiptLink, { mode: 'cors' })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const fileName =
+          this.selectedReceiptLink!.split('/').pop() || 'receipt';
+        a.download = fileName;
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+
+        Swal.fire({
+          icon: 'success',
+          title: 'Downloaded!',
+          text: 'The receipt has been downloaded successfully.',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      })
+      .catch((error) => {
+        console.error('Download failed:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Download Failed',
+          text: 'Unable to download receipt. Please try again later.',
+        });
+      });
   }
 }

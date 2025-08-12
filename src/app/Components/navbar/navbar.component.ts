@@ -34,4 +34,12 @@ export class NavbarComponent {
       console.warn('Modal element not found');
     }
   }
+  
+   scrollToSection(sectionId: string): void {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    this.showMobileMenu = false; // close menu on link click
+  }
 }

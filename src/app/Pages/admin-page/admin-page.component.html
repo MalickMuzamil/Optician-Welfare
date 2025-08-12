@@ -42,6 +42,7 @@
             <th>Gender</th>
             <th>City</th>
             <th>Company</th>
+            <th>Email</th>
             <th>Phone</th>
             <th>Event</th>
             <th>Receipt</th>
@@ -55,22 +56,27 @@
             <td>{{ reg.gender }}</td>
             <td>{{ reg.city }}</td>
             <td>{{ reg.companyName }}</td>
+            <td>{{ reg.email }}</td>
             <td>{{ reg.phoneNo || "-" }}</td>
             <td>{{ reg.eventTitle }}</td>
             <td>
               <ng-container *ngIf="reg.receiptFileLink; else noReceipt">
                 <a
-                  [href]="reg.receiptFileLink"
-                  target="_blank"
-                  [attr.download]="getFileName(reg.receiptFileLink)"
+                  href="#"
+                  (click)="
+                    openReceipt(reg.receiptFileLink); $event.preventDefault()
+                  "
+                  class="receipt-icon-link"
+                  title="Click to view receipt"
                 >
-                  {{ getFileName(reg.receiptFileLink) }}
+                  <i class="bi bi-eye"></i> View Receipt
                 </a>
               </ng-container>
               <ng-template #noReceipt>
                 <span class="text-muted">N/A</span>
               </ng-template>
             </td>
+
             <td>
               <span [class]="reg.status ? 'text-success' : 'text-danger'">
                 {{ reg.status ? "Confirmed" : "Not Confirmed" }}
@@ -88,6 +94,41 @@
             </td>
           </tr>
         </tbody>
+
+        <div
+          *ngIf="selectedReceiptLink"
+          class="receipt-modal"
+          (click)="closeReceipt()"
+        >
+          <div
+            *ngIf="selectedReceiptLink"
+            class="receipt-modal"
+            (click)="closeReceipt()"
+          >
+            <div
+              class="receipt-modal-content"
+              (click)="$event.stopPropagation()"
+            >
+              <button
+                class="btn btn-sm btn-danger mb-2"
+                (click)="closeReceipt()"
+                title="Close Receipt"
+              >
+                Close
+              </button>
+              <button
+                class="btn btn-sm btn-primary mb-2 ms-2"
+                (click)="downloadReceipt($event)"
+                title="Download Receipt"
+              >
+                <i class="bi bi-download"></i> Download
+              </button>
+              <app-download-recipt
+                [receiptFileLink]="selectedReceiptLink"
+              ></app-download-recipt>
+            </div>
+          </div>
+        </div>
       </table>
     </div>
 

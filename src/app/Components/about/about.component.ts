@@ -17,6 +17,7 @@ declare var bootstrap: any;
 
 export class AboutComponent implements OnInit, OnDestroy {
   latestEvent: any = null;
+  upcomingEvents: any[] = [];
   countdown: string = '';
   private countdownInterval: any;
   private latestEventSubscription: Subscription | undefined;
@@ -31,7 +32,7 @@ export class AboutComponent implements OnInit, OnDestroy {
   }
 
   loadLatestEvent() {
-    const payload = { page: 1, size: 1 };
+    const payload = { page: 1, size: 4 };
     return this.generalService.post('/events/getLatestEvents', payload);
   }
 
@@ -39,6 +40,8 @@ export class AboutComponent implements OnInit, OnDestroy {
     const items = response.payload?.items;
     if (items && items.length > 0) {
       this.latestEvent = items[0];
+      this.upcomingEvents = items.slice(1); // 👈 new addition
+
       this.updateCountdown();
 
       if (this.countdownInterval) {
@@ -79,8 +82,6 @@ export class AboutComponent implements OnInit, OnDestroy {
   }
 
   openSignupModal() {
-    console.log('Modal Trigger');
-
     this.latestEventSubscription = this.loadLatestEvent().subscribe({
       next: (response: any) => {
         this.handleLatestEventResponse(response);
@@ -93,8 +94,6 @@ export class AboutComponent implements OnInit, OnDestroy {
         if (modalElement) {
           const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
           modal.show();
-        } else {
-          console.warn('Signup modal not found in DOM');
         }
       },
       error: (err) => {

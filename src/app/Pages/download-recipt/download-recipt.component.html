@@ -1,0 +1,10 @@
+<div class="receipt-container">
+  <iframe
+    *ngIf="receiptFileLink"
+    [src]="receiptFileLink | safeUrl"
+    width="100%"
+    height="600px"
+    frameborder="0"
+  ></iframe>
+  <p *ngIf="!receiptFileLink">No receipt available.</p>
+</div>
