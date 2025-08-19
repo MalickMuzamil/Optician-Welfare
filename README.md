@@ -1,27 +1,62 @@
-# Optician
+📌 MEAN CRM + eStore + Registration System
+<p align="center"> <img src="https://img.shields.io/badge/Built%20With-MEAN%20Stack-blueviolet?style=for-the-badge" /> <img src="https://img.shields.io/badge/Frontend-Angular%20%26%20Bootstrap-orange?style=for-the-badge" /> <img src="https://img.shields.io/badge/Responsive-Yes-brightgreen?style=for-the-badge" /> <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" /> </p>
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
+---
 
-## Development server
+## 📖 Overview
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+This project is a complete enterprise-grade solution built on the MEAN Stack (MongoDB, Express.js, Angular, Node.js).
+It consists of three core applications:
 
-## Code scaffolding
+CRM (Customer Relationship Management) – Manage clients, leads, and business operations.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+- eStore : A fully functional online store for products & orders.
 
-## Build
+- Registration System : Secure user onboarding, authentication, and profile management.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+**The project follows modular architecture, ensuring scalability, reusability, and maintainability.**
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🚀 Tech Stack
 
-## Running end-to-end tests
+1- Frontend: Angular + Bootstrap (for responsive UI/UX)
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+2- Backend: JAVA Spring boot
 
-## Further help
+3- Database: MySQL
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+4- Architecture: APIs with modular services
+
+Authentication: JWT-based secure login system
+
+### ⚡ Features
+## 🔹 CRM
+
+1- Client & Lead Management
+
+2- Dashboard with Analytics
+
+3- Role-Based Access Control
+
+## 🔹 eStore
+
+1- Product Listings & Categories
+
+2- Cart & Checkout Flow
+
+3- Order & Payment Management
+
+## 🔹 Registration
+
+1- Secure User Authentication (JWT)
+
+2- Profile Creation & Management
+
+3- Form Validations with Angular Reactive Forms
+
+---
+
+### 🛠️ Getting Started
+
+Follow these steps to run the project locally:
