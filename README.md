@@ -60,3 +60,76 @@ Authentication: JWT-based secure login system
 ### 🛠️ Getting Started
 
 Follow these steps to run the project locally:
+
+1- Clone the repository
+
+2- git clone https://github.com/YourUsername/mean-crm-estore.git
+
+3- cd mean-crm-estore
+
+# Start frontend
+cd ../frontend
+ng serve
+
+---
+
+## 🔗 Open your browser:
+## 👉 Frontend: http://localhost:4200
+
+---
+
+## 📂 Project Structure
+
+mean-crm-estore/
+
+│── frontend/           # Angular + Bootstrap
+
+│   ├── src/app/
+
+│   │   ├── components/ # UI Components
+
+│   │   ├── pages/      # Screen-Level Views
+
+│   │   ├── services/   # API Calls
+
+│   │   └── guards/     # Auth Guards
+
+│
+
+└── README.md
+
+---
+
+## 🎨 Customization
+
+- Modify UI from frontend/src/app/components/
+
+- Update API logic in backend/controllers/
+
+- Configure MongoDB collections inside backend/models/
+
+- Tailor styles with Bootstrap classes
+
+---
+
+## 📚 Learn More
+
+1- 📘 Angular Documentation
+
+2- 📘 Bootstrap Documentation
+
+3- 📘 Node.js Documentation
+
+4- 📘 MongoDB Documentation
+
+---
+
+## 🧑‍💻 Author
+
+Made with ❤️ by Malick Muzamil
+
+📧 Email: malikmuzamil92110@gmail.com
+
+💼 LinkedIn: linkedin.com/in/malik-muzamil
+
+“Code is like humor. When you have to explain it, it’s bad.”
