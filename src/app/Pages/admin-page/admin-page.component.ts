@@ -148,98 +148,36 @@ export class AdminPageComponent implements OnInit {
 
   // ====== CSV Export Function ======
   exportToCSV() {
-    // 1. Agar event select nahi kiya
-    if (!this.selectedEventId) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'No Event Selected',
-        text: 'Please select an event to export.',
-      });
+    if (!this.registrations || this.registrations.length === 0) {
+      Swal.fire('No data to export');
       return;
     }
 
-    // 2. Event ka title nikal ke console me print karo
-    const selectedEvent = this.uniqueEvents.find(
-      (e) => e.eventId === this.selectedEventId
-    );
-    console.log('Selected Event ID:', this.selectedEventId);
-    console.log('Selected Event Title:', selectedEvent?.eventTitle);
+    const headers = ['Name', 'Gender', 'City', 'Company', 'Event', 'Status'];
 
-    // 3. Backend se sirf selected event ka data lana
-    const payload = {
-      pagination: { page: 1, size: 10000 }, // Export ke liye large size
-      eventId: this.selectedEventId,
-    };
+    const rows = this.registrations.map((reg) => [
+      `"${reg.fullName}"`,
+      `"${reg.gender}"`,
+      `"${reg.city}"`,
+      `"${reg.companyName}"`,
+      `"${reg.eventTitle}"`,
+      `"${reg.status ? 'Confirmed' : 'Not Confirmed'}"`,
+    ]);
 
-    this.generalService
-      .post('/eventtregistration/getRegisteredUsers', payload)
-      .subscribe({
-        next: (response) => {
-          const data = response.payload?.items || [];
+    const csvContent = [
+      headers.join(','),
+      ...rows.map((r) => r.join(',')),
+    ].join('\n');
 
-          if (data.length === 0) {
-            Swal.fire({
-              icon: 'info',
-              title: 'No Data',
-              text: 'No registrations found for the selected event.',
-            });
-            return;
-          }
-
-          // 4. CSV banani
-          const headers = [
-            'Name',
-            'Gender',
-            'City',
-            'Company',
-            'Email',
-            'Event',
-            'Status',
-          ];
-
-          const rows = data.map((reg: any) => [
-            `"${reg.fullName}"`,
-            `"${reg.gender}"`,
-            `"${reg.city}"`,
-            `"${reg.companyName}"`,
-            `"${reg.email}"`,
-            `"${reg.eventTitle}"`,
-            `"${reg.status ? 'Confirmed' : 'Not Confirmed'}"`,
-          ]);
-
-          const csvContent = [
-            headers.join(','),
-            ...rows.map((r: any) => r.join(',')),
-          ].join('\n');
-
-          // 5. Download CSV
-          const blob = new Blob([csvContent], {
-            type: 'text/csv;charset=utf-8;',
-          });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          const fileName = selectedEvent
-            ? `${selectedEvent.eventTitle.replace(
-                /\s+/g,
-                '_'
-              )}_Registrations.csv`
-            : 'Registrations.csv';
-          a.setAttribute('download', fileName);
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        },
-        error: (err) => {
-          console.error('Failed to fetch data for export:', err);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Failed to export registrations. Please try again later.',
-          });
-        },
-      });
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.setAttribute('download', 'Opticians-Registration.csv');
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   getFileName(url: string): string {
