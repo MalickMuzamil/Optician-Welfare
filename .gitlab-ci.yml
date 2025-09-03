@@ -1,0 +1,40 @@
+stages:
+  - deploy
+deploy_to_dev:
+  stage: deploy
+  only:
+    - stag
+  script:
+    - |
+      sshpass -p "$DEV_PASS" ssh -o StrictHostKeyChecking=no $DEV_USER@$DEV_HOST <<'EOF'
+        cd /home/devteam/web-ux-welfare
+        git pull origin stag
+        source ~/.nvm/nvm.sh
+        nvm use 18
+        npm install
+        npm run build:stag
+        sudo systemctl restart nginx
+      EOF
+deploy_to_con:
+  stage: deploy
+  only:
+    - prod
+  script:
+    - |
+      sshpass -p "$CON_PASS" ssh -o StrictHostKeyChecking=no $CON_USER@$CON_HOST <<'EOF'
+        rm -rf /var/www/web-ux-welfare
+        mkdir -p /var/www/web-ux-welfare
+      EOF
+
+      rsync -avz --delete ./ $CON_USER@$CON_HOST:/var/www/web-ux-welfare --exclude=node_modules --exclude=.git --exclude=dist --rsh="sshpass -p \"$CON_PASS\" ssh -o StrictHostKeyChecking=no"
+
+      sshpass -p "$CON_PASS" ssh -o StrictHostKeyChecking=no $CON_USER@$CON_HOST <<'EOF'
+        cd /var/www/web-ux-welfare
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+        nvm use 18
+        npm install
+        npm run build:prod
+        sudo systemctl restart nginx
+      EOF
+

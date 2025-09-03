@@ -10,35 +10,62 @@ import {
 import {
   FormBuilder,
   FormGroup,
-  ReactiveFormsModule,
   Validators,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../shared/general.service';
 import Swal from 'sweetalert2';
+import { QuillModule } from 'ngx-quill';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-event-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, QuillModule],
   templateUrl: './event-modal.component.html',
   styleUrls: ['./event-modal.component.css'],
 })
-
-
-
 export class EventModalComponent implements OnInit, OnChanges {
   eventForm: FormGroup;
   loading = false;
 
   @Input() selectedEvent: any = null;
+  @Input() kinds: string[] = [];
   @Output() formSubmitted = new EventEmitter<void>();
+
+  readonly staticKinds = ['GENERIC', 'LECTURE'];
+  kindsToShow: string[] = [];
+
+  quillModules = {
+    toolbar: [
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ font: [] }, { size: [] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ color: [] }, { background: [] }],
+      [{ script: 'sub' }, { script: 'super' }],
+      [{ align: [] }],
+      [{ list: 'ordered' }, { list: 'bullet' }, { list: 'check' }],
+      [{ indent: '-1' }, { indent: '+1' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image', 'video'],
+      ['clean'],
+    ],
+    history: { delay: 500, maxStack: 200, userOnly: true },
+    clipboard: { matchVisual: true },
+  };
+
+  formats = [
+    'header', 'font', 'size', 'bold', 'italic', 'underline', 'strike',
+    'color', 'background', 'script', 'align', 'list', 'indent',
+    'blockquote', 'code-block', 'link', 'image', 'video',
+  ];
 
   constructor(private fb: FormBuilder, private generalService: GeneralService) {
     this.eventForm = this.fb.group({
       title: ['', Validators.required],
+      kind: ['', Validators.required],
       description: ['', Validators.required],
       address: ['', Validators.required],
       eventDateFrom: ['', Validators.required],
@@ -52,50 +79,57 @@ export class EventModalComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    if (this.selectedEvent) {
-      this.patchForm(this.selectedEvent);
-    }
+    this.kindsToShow = this.isEditMode ? this.kinds : this.staticKinds;
+
+    if (this.selectedEvent) this.patchForm(this.selectedEvent);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedEvent'] && changes['selectedEvent'].currentValue) {
-      this.patchForm(changes['selectedEvent'].currentValue);
-    } else if (
-      changes['selectedEvent'] &&
-      !changes['selectedEvent'].currentValue
-    ) {
-      this.eventForm.reset({
-        latest: true,
-        paid: false,
-        createdByUserId: '',
-      });
+    if (changes['selectedEvent']) {
+      if (changes['selectedEvent'].currentValue) {
+        this.patchForm(changes['selectedEvent'].currentValue);
+      } else {
+        this.eventForm.reset({
+          latest: true,
+          paid: false,
+          createdByUserId: '',
+          kind: '',
+        });
+      }
+    }
+
+    if (changes['kinds'] && changes['kinds'].currentValue) {
+      if (this.isEditMode) {
+        this.kindsToShow = this.kinds;
+      }
     }
   }
 
   patchForm(eventData: any) {
     this.eventForm.patchValue({
-      title: eventData.title,
-      description: eventData.description,
-      address: eventData.address,
-      eventDateFrom: eventData.eventDateFrom,
-      eventDateTo: eventData.eventDateTo,
-      eventTimeFrom: eventData.eventTimeFrom,
-      eventTimeTo: eventData.eventTimeTo,
-      latest: eventData.latest,
-      paid: eventData.paid,
+      title: eventData.title || '',
+      description: eventData.description || '', // Quill HTML saved
+      address: eventData.address || '',
+      eventDateFrom: eventData.eventDateFrom || '',
+      eventDateTo: eventData.eventDateTo || '',
+      eventTimeFrom: eventData.eventTimeFrom || '',
+      eventTimeTo: eventData.eventTimeTo || '',
+      latest: eventData.latest ?? true,
+      paid: eventData.paid ?? false,
       createdByUserId: eventData.createdByUserId || '',
+      kind: eventData.kind || '',
     });
   }
 
   get isEditMode(): boolean {
-    return (
-      !!this.selectedEvent &&
-      (!!this.selectedEvent.id || !!this.selectedEvent.eventId)
-    );
+    return !!this.selectedEvent && (!!this.selectedEvent.id || !!this.selectedEvent.eventId);
   }
 
   onSubmit() {
-    if (this.eventForm.invalid) return;
+    if (this.eventForm.invalid) {
+      console.warn('Form invalid', this.eventForm.value);
+      return;
+    }
 
     const userData = localStorage.getItem('adminData');
     const userId = userData ? JSON.parse(userData).id : null;
@@ -104,90 +138,53 @@ export class EventModalComponent implements OnInit, OnChanges {
       Swal.fire({
         icon: 'error',
         title: 'User Not Found',
-        text: 'Please login again or check local storage.',
+        text: 'Please login again.',
       });
       return;
     }
 
-    this.eventForm.patchValue({ createdByUserId: userId });
+    const descriptionHtml = this.eventForm.get('description')?.value || '';
+
+    this.eventForm.patchValue({
+      createdByUserId: userId,
+      description: descriptionHtml,
+    });
+
+    const payload = Object.fromEntries(
+      Object.entries(this.eventForm.value).filter(([_, v]) => v !== null && v !== '')
+    );
+
     this.loading = true;
 
-    if (this.isEditMode) {
-      const id = this.selectedEvent.id || this.selectedEvent.eventId;
+    const request$ = this.isEditMode
+      ? this.generalService.patch(
+          `/events/updateEvent/${this.selectedEvent.id || this.selectedEvent.eventId}`,
+          payload
+        )
+      : this.generalService.post('/events/registerEvent', payload);
 
-      this.generalService
-        .patch(`/events/updateEvent/${id}`, this.eventForm.value)
-        .subscribe({
-          next: () => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Event Updated!',
-              text: 'Your event has been successfully updated.',
-            });
-            this.loading = false;
-            this.formSubmitted.emit();
-             this.closeModal();
-          },
-          error: (err) => {
-            console.error('Error updating event:', err);
-            const serverMessage =
-              err?.error?.errors?.[0]?.debugMessage ||
-              'Failed to update event. Please try again.';
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: serverMessage,
-            });
-            this.loading = false;
-            this.formSubmitted.emit();
-          },
+    request$.subscribe({
+      next: () => {
+        Swal.fire({
+          icon: 'success',
+          title: this.isEditMode ? 'Event Updated!' : 'Event Created!',
         });
-    } else {
-      this.generalService
-        .post('/events/registerEvent', this.eventForm.value)
-        .subscribe({
-          next: () => {
-            Swal.fire({
-              icon: 'success',
-              title: 'Event Created!',
-              text: 'Your event has been successfully registered.',
-            });
-            this.eventForm.reset({
-              latest: true,
-              paid: false,
-              createdByUserId: userId,
-            });
-            this.loading = false;
-            this.closeModal();
-          },
-          error: (err) => {
-            console.error('Error creating event:', err);
-            const serverMessage =
-              err?.error?.errors?.[0]?.debugMessage ||
-              'Failed to create event. Please try again.';
-            Swal.fire({
-              icon: 'error',
-              title: 'Error',
-              text: serverMessage,
-            });
-            this.eventForm.reset({
-              latest: true,
-              paid: false,
-              createdByUserId: userId,
-            });
-            this.loading = false;
-          },
-        });
-    }
+        this.loading = false;
+        this.formSubmitted.emit();
+        this.closeModal();
+      },
+      error: (err) => {
+        console.error(err);
+        this.loading = false;
+      },
+    });
   }
 
   closeModal(): void {
     const modalElement = document.getElementById('eventModal');
     if (modalElement) {
       const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
-      }
+      if (modalInstance) modalInstance.hide();
     }
   }
 }

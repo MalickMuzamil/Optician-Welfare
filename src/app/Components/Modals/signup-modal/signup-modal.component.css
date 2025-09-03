@@ -1,7 +1,183 @@
-.title {
-  color: #003366;
+.oap-signup .modal-dialog {
+  max-width: 920px;
 }
 
-.sub-heading {
-  color: #003366;
+.oap-signup .modal-content {
+  border: 0;
+  border-radius: 20px;
+  background: var(--oap-card);
+  box-shadow: 0 22px 60px rgba(2, 8, 20, 0.12);
+  overflow: hidden;
+}
+
+.oap-signup .modal-header {
+  padding: 1rem 1.25rem;
+  border: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.035), transparent);
+}
+
+.oap-signup .btn-close {
+  opacity: 0.75;
+}
+
+.oap-signup .btn-close:hover {
+  opacity: 1;
+}
+
+.oap-signup .modal-body {
+  padding: 1.25rem 1.25rem 1.5rem;
+  background: var(--oap-card);
+}
+
+.oap-signup .title {
+  font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.75rem);
+  color: var(--oap-text-dark);
+}
+
+.oap-signup .sub-heading {
+  font-size: 0.95rem;
+  color: var(--oap-muted);
+}
+
+.oap-signup .form-control {
+  height: 48px;
+  border-radius: 12px;
+  border: 1px solid var(--oap-border);
+  background: #fff;
+  color: var(--oap-text-dark);
+  transition: box-shadow 0.2s, border-color 0.2s, background-color 0.2s;
+}
+
+.oap-signup .form-control:focus {
+  border-color: var(--oap-secondary);
+  box-shadow: 0 0 0 0.18rem rgba(58, 61, 152, 0.18);
+  background: #fff;
+}
+
+.oap-signup .form-control::placeholder {
+  color: var(--oap-muted);
+}
+
+.oap-signup .form-control.is-invalid,
+.oap-signup .form-control.is-invalid:focus {
+  border-color: #dc3545;
+  box-shadow: 0 0 0 0.18rem rgba(220, 53, 69, 0.18);
+}
+
+.oap-signup .invalid-feedback {
+  font-size: 0.8rem;
+}
+
+.oap-signup .form-check-input {
+  width: 1.05em;
+  height: 1.05em;
+  margin-top: 0.15rem;
+  border-radius: 0.25rem;
+  border-color: var(--oap-border);
+}
+
+.oap-signup .form-check-input:focus {
+  box-shadow: 0 0 0 0.18rem rgba(58, 61, 152, 0.18);
+  border-color: var(--oap-secondary);
+}
+
+.oap-signup .form-check-input:checked {
+  background-color: var(--oap-secondary);
+  border-color: var(--oap-secondary);
+}
+
+.oap-signup input[type="file"].form-control {
+  height: auto;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+
+.oap-signup .btn-success {
+  background: var(--oap-primary);
+  border: 0;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  font-weight: var(--fw-bold);
+  box-shadow: 0 10px 24px rgba(27, 191, 135, 0.25);
+}
+
+.oap-signup .btn-success:hover {
+  filter: brightness(0.96);
+}
+
+.oap-signup .btn-success:disabled {
+  opacity: 0.65;
+  box-shadow: none;
+}
+
+.oap-signup .border-end {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+
+.oap-signup img.img-fluid.rounded {
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.12);
+}
+
+.oap-signup h1,
+.oap-signup h2,
+.oap-signup h3,
+.oap-signup h4,
+.oap-signup h5,
+.oap-signup h6 {
+  color: var(--oap-text-dark);
+  font-weight: var(--fw-bold);
+}
+
+.lecture-card {
+  max-width: 600px;
+  margin: auto;
+  background: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.lecture-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.lecture-card .card-title {
+  font-size: 1.5rem;
+  color: var(--oap-primary) !important;
+}
+
+.lecture-card ul {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.logo-text {
+  background: var(--oap-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-family: inherit !important;
+}
+
+.truncated {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;  
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.description-wrapper button {
+  font-size: 0.7rem;
+  margin-top: 0.2rem; 
+  display: inline-block;
+}
+
+
+.card-form-gap {
+  margin-bottom: 2rem; 
+}
+
+@media (min-width: 768px) {
+  .modal-row {
+    align-items: center !important;
+  }
 }

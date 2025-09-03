@@ -1,15 +1,222 @@
-.btn-primary {
-  background-color: #003366 !important;
-  border-color: #003366 !important;
+@import url('./app/Components/styles/button.css');
+@import url('./app/Components/styles/form.css');
+
+:root {
+  --oap-primary: #1bbf87;
+  --oap-secondary: #3a3d98;
+  --oap-gradient: linear-gradient(90deg, #27c59a 0%, #1aa5a5 50%, #6a49b7 100%);
+  --oap-text-dark: #0f172a;
+  --oap-muted: #64748b;
+  --oap-card: #ffffff;
+  --oap-card-border: #e2e8f0;
+  --oap-border: #e2e8f0;
+  --oap-bg: #f7f8fa;
+  
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --line-height-default: 1.6;
+  --letter-spacing-default: 0.01em;
+
+  --fs-sm: .95rem;
+  --fs-lg: 1.125rem;
+
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+  --font-weight-regular: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 700;
+  --line-height-default: 1.6;
+  --letter-spacing-default: 0.01em;
+
+  --bs-font-sans-serif: var(--font-sans);
+  --bs-body-font-family: var(--font-sans);
+  --bs-body-line-height: var(--line-height-default);
 }
 
-.btn-primary:hover,
-.btn-primary:focus,
-.btn-primary:active {
-  background-color: #050988 !important;
+
+html,
+body {
+  font-family: var(--font-sans);
+  line-height: var(--line-height-default);
+  letter-spacing: var(--letter-spacing-default);
 }
 
 
-[id] {
-  scroll-margin-top: 150px;
+html,
+body {
+  font-family: var(--font-sans) !important;
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-default);
+  letter-spacing: var(--letter-spacing-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+*,
+*::before,
+*::after {
+  font-family: inherit !important;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: inherit !important;
+  letter-spacing: inherit;
+  line-height: 1.25;
+  margin-top: 0;
+  margin-bottom: .5rem;
+}
+
+p,
+span,
+small,
+strong,
+em,
+i,
+b,
+u,
+mark,
+blockquote,
+figcaption,
+a,
+li,
+dt,
+dd,
+label,
+legend,
+th,
+td,
+caption,
+code,
+kbd,
+samp,
+pre,
+button,
+input,
+select,
+textarea {
+  font-family: inherit !important;
+  letter-spacing: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+  color: inherit;
+}
+
+/* Bootstrap components */
+.btn,
+.badge,
+.nav-link,
+.dropdown-item,
+.form-control,
+.form-select,
+.alert,
+.breadcrumb,
+.card,
+.card-title,
+.card-text,
+.modal-title,
+.modal-body,
+.toast,
+.list-group-item,
+.pagination,
+.table {
+  font-family: inherit !important;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+
+/* Your custom classes */
+.logo-text,
+.title,
+.sidebar-title,
+.event-card .title-row,
+.event-meta,
+.contact-link,
+.btn-oap,
+.btn-outline-oap,
+.badge-paid,
+.badge-free {
+  font-family: inherit !important;
+  letter-spacing: inherit;
+  line-height: inherit;
+}
+
+.fst-italic {
+  font-style: italic;
+}
+
+.fw-semibold {
+  font-weight: var(--font-weight-medium);
+}
+
+.fw-medium {
+  font-weight: var(--font-weight-medium);
+}
+
+strong {
+  font-weight: var(--font-weight-bold);
+}
+
+
+a {
+  text-decoration: none;
+}
+
+a:hover,
+a:focus {
+  text-decoration: underline;
+}
+
+
+[ng-reflect-ng-if],
+[ng-reflect-ng-for-of] {
+  font-family: inherit !important;
+}
+
+
+h1 {
+  font-size: clamp(2rem, 1.6rem + 1.5vw, 2.75rem);
+}
+
+h2 {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+}
+
+h3 {
+  font-size: clamp(1.4rem, 1.2rem + .8vw, 1.75rem);
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
+
+p,
+li {
+  font-size: 1rem;
+}
+
+small {
+  font-size: .875rem;
+}
+
+
+iframe {
+  font-family: inherit;
 }

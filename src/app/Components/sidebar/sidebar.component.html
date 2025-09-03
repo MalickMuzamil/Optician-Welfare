@@ -130,13 +130,3 @@
     </a>
   </div>
 </div>
-
-<app-dailog-box
-  [visible]="showLogoutModal"
-  [title]="'Logout Confirmation'"
-  [message]="'Are you sure you want to logout?'"
-  [confirmText]="'Yes, Logout'"
-  [cancelText]="'Cancel'"
-  (confirm)="handleLogoutConfirm()"
-  (cancel)="handleLogoutCancel()"
-></app-dailog-box>

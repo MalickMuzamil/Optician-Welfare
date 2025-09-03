@@ -22,27 +22,30 @@
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
-              "src/styles.css"
+              "src/styles.css",
+              "node_modules/quill/dist/quill.core.css",
+              "node_modules/quill/dist/quill.snow.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ]
+            ],
+            "allowedCommonJsDependencies": ["bootstrap","sweetalert2","file-saver","quill"]
           },
           "configurations": {
             "production": {
+              "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": { "minify": true, "inlineCritical": true },
+                "fonts": { "inline": true }
+              },
+              "aot": true,
+              "extractLicenses": true,
+              "sourceMap": false,
               "budgets": [
-                {
-                  "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
-                }
-              ],
-              "outputHashing": "all"
+                { "type": "initial", "maximumWarning": "2mb", "maximumError": "5mb" },
+                { "type": "anyComponentStyle", "maximumWarning": "8kb", "maximumError": "20kb" }
+              ]
             },
             "development": {
               "optimization": false,
@@ -61,20 +64,14 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production": {
-              "buildTarget": "Optician:build:production"
-            },
-            "development": {
-              "buildTarget": "Optician:build:development"
-            }
+            "production": { "buildTarget": "Optician:build:production" },
+            "development": { "buildTarget": "Optician:build:development" }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": {
-            "buildTarget": "Optician:build"
-          }
+          "options": { "buildTarget": "Optician:build" }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
@@ -89,7 +86,5 @@
       }
     }
   },
-  "cli": {
-    "analytics": "5cc703ab-b1bc-44cd-aade-809275dc8ace"
-  }
+  "cli": { "analytics": "5cc703ab-b1bc-44cd-aade-809275dc8ace" }
 }

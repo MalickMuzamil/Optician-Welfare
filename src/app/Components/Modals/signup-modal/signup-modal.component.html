@@ -1,13 +1,17 @@
 <div
-  class="modal fade"
+  #hostModal
+  class="modal fade oap-signup"
   id="signupModal"
   tabindex="-1"
+  role="dialog"
   aria-labelledby="signupModalLabel"
+  aria-modal="true"
   aria-hidden="true"
 >
-  <div class="modal-dialog modal-dialog-centered modal-lg">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header border">
+        <h5 id="signupModalLabel" class="modal-title d-none">Signup</h5>
         <button
           type="button"
           class="btn-close"
@@ -15,57 +19,178 @@
           aria-label="Close"
         ></button>
       </div>
+
       <div class="modal-body">
-        <div class="row align-items-center">
-          <div
-            class="col-md-6 border-end pe-4 d-none d-md-flex justify-content-center align-items-center"
-          >
-            <img
-              src="assets/Modal/ModalImage.jpeg"
-              alt="Expo Poster"
-              class="img-fluid rounded"
-            />
+        <div
+          class="row modal-row flex-column flex-md-row align-items-start align-md-items-center"
+        >
+          <div class="col-12 d-block d-md-none mb-3 text-center">
+            <h2 class="fw-bold logo-text">Apply Now</h2>
+            <p class="text-muted mb-0">
+              Fill out the form to complete your registration.
+            </p>
           </div>
 
-          <div class="col-12 col-md-6 ps-md-4">
-            <div class="mb-3 text-center text-md-start" *ngIf="latestEvent">
-              <h4 class="fw-bold title display-6 mb-1">
-                {{ latestEvent.title || "Expo" }}
-              </h4>
+          <div
+            class="col-md-6 border-end pe-4 justify-content-center align-items-center order-1 order-md-1 card-form-gap"
+          >
+            <ng-container
+              *ngIf="kinds.includes('GENERIC'); else lectureTemplate"
+            >
+              <div class="w-100 text-center mb-3 mb-md-0">
+                <div class="position-relative text-center">
+                  <img
+                    src="assets/Modal/ModalImage.jpeg"
+                    alt="Event Poster"
+                    class="img-fluid rounded"
+                  />
+                  <div
+                    *ngIf="latestEvent"
+                    class="position-absolute bottom-0 start-0 end-0 bg-dark bg-opacity-50 text-white p-2 rounded-bottom"
+                  >
+                    <h6 class="mb-1">{{ latestEvent.title || "Expo" }}</h6>
+                    <small>
+                      {{
+                        getDateRange(
+                          latestEvent.eventDateFrom || "",
+                          latestEvent.eventDateTo || ""
+                        )
+                      }}
+                    </small>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
 
-              <p class="mb-1 sub-heading fw-semibold">
-                {{
-                  getFormattedDateRange(
-                    latestEvent?.eventDateFrom,
-                    latestEvent?.eventDateTo
-                  )
-                }}
-              </p>
+            <ng-template #lectureTemplate>
+              <div
+                class="card shadow-lg border-0 rounded-3 lecture-card mt-3 mt-md-0"
+              >
+                <div class="card-body">
+                  <h3
+                    class="card-title fw-bold mb-3 text-primary text-center border-bottom"
+                  >
+                    {{ event?.title }}
+                  </h3>
 
-              <p class="mb-3 sub-heading fw-semibold">
-                Venue: {{ latestEvent.address }}
+                  <div class="description-wrapper mb-2">
+                    <p
+                      class="card-text text-muted mb-1"
+                      [class.truncated]="!showFullDescription && !isDesktop()"
+                      [innerHTML]="event?.description"
+                    ></p>
+
+                    <button
+                      *ngIf="event?.description && !isDesktop()"
+                      class="btn btn-link p-0 text-muted mx-auto d-block"
+                      (click)="toggleDescription()"
+                    >
+                      {{ showFullDescription ? "Show Less" : "Show More" }}
+                    </button>
+                  </div>
+
+                  <ul class="list-unstyled text-start d-inline-block mt-3">
+                    <li class="mb-2" *ngIf="event?.address">
+                      <i class="bi bi-geo-alt-fill text-danger me-2"></i>
+                      <strong>Address:</strong> {{ event?.address }}
+                    </li>
+
+                    <li
+                      class="mb-2"
+                      *ngIf="event?.eventDateFrom && event?.eventDateTo"
+                    >
+                      <i class="bi bi-calendar-event text-success me-2"></i>
+                      <strong>Date:</strong>
+                      {{
+                        getDateRange(event!.eventDateFrom, event!.eventDateTo)
+                      }}
+                    </li>
+
+                    <li *ngIf="event?.eventTimeFrom || event?.eventTimeTo">
+                      <i class="bi bi-clock-fill text-warning me-2"></i>
+                      <strong>Time:</strong>
+                      {{
+                        getTimeRange(
+                          event!.eventDateFrom,
+                          event!.eventDateTo,
+                          event!.eventTimeFrom,
+                          event!.eventTimeTo
+                        )
+                      }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="col-12 col-md-6 ps-md-4 order-2 order-md-2">
+            <div class="mb-4 text-center text-md-start d-none d-md-block">
+              <h2 class="fw-bold logo-text">Apply Now</h2>
+              <p class="text-muted mb-0">
+                Fill out the form to complete your registration.
               </p>
             </div>
 
-            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" novalidate>
               <div class="mb-3">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Company Name"
                   formControlName="companyName"
+                  [class.is-invalid]="isInvalid('companyName')"
                 />
+                <div
+                  *ngIf="hasError('companyName', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  Company name is required.
+                </div>
+                <div
+                  *ngIf="hasError('companyName', 'maxlength')"
+                  class="invalid-feedback d-block"
+                >
+                  Max 120 characters.
+                </div>
+                <div
+                  *ngIf="hasError('companyName', 'pattern')"
+                  class="invalid-feedback d-block"
+                >
+                  Only letters and spaces are allowed.
+                </div>
               </div>
 
+              <!-- Full Name -->
               <div class="mb-2">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Name"
                   formControlName="fullName"
+                  [class.is-invalid]="isInvalid('fullName')"
                 />
+                <div
+                  *ngIf="hasError('fullName', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  Name is required.
+                </div>
+                <div
+                  *ngIf="hasError('fullName', 'maxlength')"
+                  class="invalid-feedback d-block"
+                >
+                  Max 120 characters.
+                </div>
+                <div
+                  *ngIf="hasError('fullName', 'pattern')"
+                  class="invalid-feedback d-block"
+                >
+                  Only letters and spaces are allowed.
+                </div>
               </div>
 
+              <!-- Gender -->
               <div class="mb-2">
                 <div class="form-check form-check-inline">
                   <input
@@ -73,8 +198,9 @@
                     type="radio"
                     formControlName="gender"
                     value="Male"
+                    id="genderMale"
                   />
-                  <label class="form-check-label">Male</label>
+                  <label class="form-check-label" for="genderMale">Male</label>
                 </div>
                 <div class="form-check form-check-inline">
                   <input
@@ -82,47 +208,125 @@
                     type="radio"
                     formControlName="gender"
                     value="Female"
+                    id="genderFemale"
                   />
-                  <label class="form-check-label">Female</label>
+                  <label class="form-check-label" for="genderFemale"
+                    >Female</label
+                  >
+                </div>
+                <div
+                  *ngIf="hasError('gender', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  Please select a gender.
                 </div>
               </div>
 
+              <!-- Email -->
               <div class="mb-2">
                 <input
                   type="email"
                   class="form-control"
                   placeholder="Email"
                   formControlName="email"
+                  [class.is-invalid]="isInvalid('email')"
                 />
+                <div
+                  *ngIf="hasError('email', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  Email is required.
+                </div>
+                <div
+                  *ngIf="hasError('email', 'email')"
+                  class="invalid-feedback d-block"
+                >
+                  Enter a valid email.
+                </div>
+                <div
+                  *ngIf="hasError('email', 'maxlength')"
+                  class="invalid-feedback d-block"
+                >
+                  Max 256 characters.
+                </div>
               </div>
 
+              <!-- Phone -->
               <div class="mb-2">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Phone Number"
                   formControlName="phoneNo"
+                  [class.is-invalid]="isInvalid('phoneNo')"
                 />
+                <div
+                  *ngIf="hasError('phoneNo', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  Phone number is required.
+                </div>
+                <div
+                  *ngIf="hasError('phoneNo', 'maxlength')"
+                  class="invalid-feedback d-block"
+                >
+                  Max 30 characters.
+                </div>
+                <div
+                  *ngIf="hasError('phoneNo', 'pattern')"
+                  class="invalid-feedback d-block"
+                >
+                  Use digits and + - ( ) only.
+                </div>
               </div>
 
+              <!-- Address -->
               <div class="mb-2">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="Address"
                   formControlName="address"
+                  [class.is-invalid]="isInvalid('address')"
                 />
+                <div
+                  *ngIf="hasError('address', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  Address is required.
+                </div>
+                <div
+                  *ngIf="hasError('address', 'maxlength')"
+                  class="invalid-feedback d-block"
+                >
+                  Max 200 characters.
+                </div>
               </div>
 
+              <!-- City -->
               <div class="mb-2">
                 <input
                   type="text"
                   class="form-control"
                   placeholder="City"
                   formControlName="city"
+                  [class.is-invalid]="isInvalid('city')"
                 />
+                <div
+                  *ngIf="hasError('city', 'required')"
+                  class="invalid-feedback d-block"
+                >
+                  City is required.
+                </div>
+                <div
+                  *ngIf="hasError('city', 'maxlength')"
+                  class="invalid-feedback d-block"
+                >
+                  Max 120 characters.
+                </div>
               </div>
 
+              <!-- File Upload (if event is paid) -->
               <div class="mb-3" *ngIf="latestEvent?.paid">
                 <input
                   type="file"
@@ -130,18 +334,33 @@
                   id="imageInput"
                   #imageInput
                   (change)="onFileSelected($event)"
-                  placeholder="Upload Payment Proof"
                   accept="image/*"
+                  [class.is-invalid]="fileInvalid()"
                 />
-                <small class="text-danger"
-                  >Please upload a clear image of your payment receipt.</small
+                <div
+                  *ngIf="fileHasError('required')"
+                  class="invalid-feedback d-block"
                 >
+                  Payment receipt image is required.
+                </div>
+                <div
+                  *ngIf="fileHasError('type')"
+                  class="invalid-feedback d-block"
+                >
+                  Only image files are allowed.
+                </div>
+                <div
+                  *ngIf="fileHasError('size')"
+                  class="invalid-feedback d-block"
+                >
+                  Max size 5MB.
+                </div>
               </div>
 
               <button
                 type="submit"
-                class="btn btn-success w-100 fw-bold"
-                [disabled]="signupForm.invalid"
+                class="btn btn-oap w-100"
+                [disabled]="submitting"
               >
                 Submit Registration
               </button>

@@ -1,34 +1,42 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
 const apiUrl = environment.apiUrl;
 
-@Injectable({
-  providedIn: 'root',
-})
+type HttpOptions = {
+  headers?: HttpHeaders | { [header: string]: string | string[] };
+  params?: HttpParams | { [param: string]: string | number | boolean | ReadonlyArray<string | number | boolean> };
+  withCredentials?: boolean;
+};
+
+@Injectable({ providedIn: 'root' })
 export class GeneralService {
   constructor(private http: HttpClient, private router: Router) {}
 
-  get(endpoint: string, params?: any): Observable<any> {
-    return this.http.get(apiUrl + endpoint, { params });
+  private buildUrl(endpoint: string): string {
+    return /^https?:\/\//i.test(endpoint) ? endpoint : apiUrl + endpoint;
   }
 
-  patch(endpoint: string, body: any): Observable<any> {
-    return this.http.patch(apiUrl + endpoint, body);
+  get<T = any>(endpoint: string, params?: HttpOptions['params'], options?: Omit<HttpOptions, 'params'>): Observable<T> {
+    return this.http.get<T>(this.buildUrl(endpoint), { params, ...(options ?? {}) });
   }
 
-  delete(endpoint: string, params?: any): Observable<any> {
-    return this.http.delete(apiUrl + endpoint, { params });
+  post<T = any>(endpoint: string, body?: unknown, options?: HttpOptions): Observable<T> {
+    return this.http.post<T>(this.buildUrl(endpoint), body, options);
   }
 
-  post(endpoint: string, body: any): Observable<any> {
-    return this.http.post(apiUrl + endpoint, body);
+  patch<T = any>(endpoint: string, body?: unknown, options?: HttpOptions): Observable<T> {
+    return this.http.patch<T>(this.buildUrl(endpoint), body, options);
   }
 
-  logout() {
+  delete<T = any>(endpoint: string, params?: HttpOptions['params'], options?: Omit<HttpOptions, 'params'>): Observable<T> {
+    return this.http.delete<T>(this.buildUrl(endpoint), { params, ...(options ?? {}) });
+  }
+
+  logout(): void {
     localStorage.clear();
     this.router.navigate(['']);
   }

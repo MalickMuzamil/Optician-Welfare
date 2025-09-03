@@ -1,0 +1,36 @@
+.oap-footer {
+  background: var(--oap-gradient);
+  color: #fff;
+  border-top: none;
+  min-height: 80px;
+  padding: .75rem 0;
+}
+
+.oap-footer .social .oap-footer-link,
+.oap-footer .oap-footer-link {
+  color: #fff !important;
+  text-decoration: none;
+  transition: opacity .2s ease, color .2s ease, background .2s ease, -webkit-text-fill-color .2s ease;
+  border-bottom: none !important;
+}
+
+.oap-footer .oap-footer-link:hover,
+.oap-footer .oap-footer-link:focus {
+  background: #fff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 1;
+  text-decoration: none;
+  border-bottom: none !important;
+}
+
+.oap-footer .social .oap-footer-link:hover i,
+.oap-footer .social .oap-footer-link:focus i {
+  background: #fff;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 767.98px) {
+  .oap-footer { padding: 1rem 0; }
+}

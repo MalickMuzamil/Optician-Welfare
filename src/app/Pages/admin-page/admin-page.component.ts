@@ -4,9 +4,11 @@ import { GeneralService } from '../../shared/general.service';
 import { SidebarComponent } from '../../Components/sidebar/sidebar.component';
 import { PaginationComponent } from '../../Components/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
-import Swal from 'sweetalert2';
-import { DailogBoxComponent } from '../../Components/dailog-box/dailog-box.component'; // add dialog box import
 import { DownloadReciptComponent } from '../download-recipt/download-recipt.component';
+
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+import { LazyAlertService } from '../../shared/lazy-alert';
 
 @Component({
   selector: 'app-admin-page',
@@ -16,7 +18,6 @@ import { DownloadReciptComponent } from '../download-recipt/download-recipt.comp
     SidebarComponent,
     PaginationComponent,
     FormsModule,
-    DailogBoxComponent,
     DownloadReciptComponent,
   ],
   templateUrl: './admin-page.component.html',
@@ -24,9 +25,7 @@ import { DownloadReciptComponent } from '../download-recipt/download-recipt.comp
 })
 export class AdminPageComponent implements OnInit {
   allRegistrations: any[] = [];
-
   uniqueEvents: { eventId: number; eventTitle: string }[] = [];
-
   registrations: any[] = [];
 
   currentPage: number = 1;
@@ -35,13 +34,25 @@ export class AdminPageComponent implements OnInit {
 
   selectedEventId: number | undefined;
 
-  showConfirmDialog = false;
   selectedRegistration: any = null;
+  selectedReceiptLink: string | null = null;
 
-  constructor(private generalService: GeneralService) {}
+  constructor(
+    private generalService: GeneralService,
+    private alerts: LazyAlertService
+  ) { }
 
   ngOnInit(): void {
     this.loadRegistrations(this.currentPage, this.pageSize);
+    this.loadEvents(1, 100);
+  }
+
+  private sortByStatus(data: any[]): any[] {
+    return data.sort((a, b) => {
+      if (a.status && !b.status) return -1;
+      if (!a.status && b.status) return 1;
+      return 0;
+    });
   }
 
   loadRegistrations(page: number, size: number, eventId?: number): void {
@@ -57,12 +68,14 @@ export class AdminPageComponent implements OnInit {
       .post('/eventtregistration/getRegisteredUsers', payload)
       .subscribe({
         next: (response) => {
-          this.registrations = response.payload?.items || [];
+          let data = response.payload?.items || [];
+          this.registrations = this.sortByStatus(data);
+
           this.totalPages = response.payload?.totalPages || 1;
           this.currentPage = page;
 
           if (!eventId) {
-            this.allRegistrations = response.payload?.items || [];
+            this.allRegistrations = data;
 
             const eventMap = new Map<number, string>();
             this.allRegistrations.forEach((reg) => {
@@ -85,6 +98,25 @@ export class AdminPageComponent implements OnInit {
       });
   }
 
+  loadEvents(page: number, size: number) {
+    const payload: any = { page, size };
+
+    this.generalService.post('/events/getLatestEvents', payload).subscribe({
+      next: (response: any) => {
+        const events = response.payload?.items || [];
+        this.uniqueEvents = events.map((e: any) => ({
+          eventId: e.eventId,
+          eventTitle: e.title,
+        }));
+
+        console.log('Events loaded:', this.uniqueEvents);
+      },
+      error: (err: any) => {
+        console.error('Error loading events:', err);
+      },
+    });
+  }
+
   onEventSelected(event: Event): void {
     const selectedId = +(event.target as HTMLSelectElement).value;
     this.selectedEventId = selectedId || undefined;
@@ -105,34 +137,37 @@ export class AdminPageComponent implements OnInit {
     );
   }
 
-  openConfirmDialog(reg: any) {
-    this.selectedRegistration = reg;
-    this.showConfirmDialog = true;
+  async openConfirmDialog(reg: any) {
+    const confirmed = await this.alerts.confirm({
+      title: 'Confirm Registration',
+      text: `Do you want to confirm registration for ${reg.fullName}?`,
+      confirmButtonText: 'Yes, Confirm',
+      cancelButtonText: 'Cancel',
+    });
+
+    if (confirmed) {
+      this.confirmRegistration(reg);
+    }
   }
 
-  confirmRegistration() {
-    if (!this.selectedRegistration) return;
-
-    const reg = this.selectedRegistration;
+  private confirmRegistration(reg: any) {
     const url = `/eventtregistration/sendInvite/${reg.registrationId}`;
 
     this.generalService.post(url, {}).subscribe({
-      next: () => {
+      next: async () => {
         reg.status = true;
-        this.showConfirmDialog = false;
-        this.selectedRegistration = null;
-        Swal.fire({
+        await this.alerts.fire({
           icon: 'success',
           title: 'Success!',
           text: `Registration confirmed for ${reg.fullName}.`,
           timer: 2000,
           showConfirmButton: false,
         });
+
+        this.registrations = this.sortByStatus(this.registrations);
       },
-      error: (err) => {
-        this.showConfirmDialog = false;
-        this.selectedRegistration = null;
-        Swal.fire({
+      error: async () => {
+        await this.alerts.fire({
           icon: 'error',
           title: 'Error',
           text: 'Failed to confirm registration. Please try again.',
@@ -141,50 +176,97 @@ export class AdminPageComponent implements OnInit {
     });
   }
 
-  cancelConfirm() {
-    this.showConfirmDialog = false;
-    this.selectedRegistration = null;
-  }
-
-  // ====== CSV Export Function ======
-  exportToCSV() {
-    if (!this.registrations || this.registrations.length === 0) {
-      Swal.fire('No data to export');
+  // ====== CSV Export Function (Only Confirmed) ======
+  exportToExcel() {
+    if (!this.selectedEventId) {
+      this.alerts.fire({
+        icon: 'warning',
+        title: 'No Event Selected',
+        text: 'Please select an event to export.',
+      });
       return;
     }
 
-    const headers = ['Name', 'Gender', 'City', 'Company', 'Event', 'Status'];
+    const selectedEvent = this.uniqueEvents.find(
+      (e) => e.eventId === this.selectedEventId
+    );
 
-    const rows = this.registrations.map((reg) => [
-      `"${reg.fullName}"`,
-      `"${reg.gender}"`,
-      `"${reg.city}"`,
-      `"${reg.companyName}"`,
-      `"${reg.eventTitle}"`,
-      `"${reg.status ? 'Confirmed' : 'Not Confirmed'}"`,
-    ]);
+    const payload = {
+      pagination: { page: 1, size: 10000 },
+      eventId: this.selectedEventId,
+    };
 
-    const csvContent = [
-      headers.join(','),
-      ...rows.map((r) => r.join(',')),
-    ].join('\n');
+    this.generalService
+      .post('/eventtregistration/getRegisteredUsers', payload)
+      .subscribe({
+        next: async (response) => {
+          const data = response.payload?.items || [];
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.setAttribute('download', 'Opticians-Registration.csv');
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+          if (data.length === 0) {
+            await this.alerts.fire({
+              icon: 'info',
+              title: 'No Data',
+              text: 'No registrations found for the selected event.',
+            });
+            return;
+          }
+
+          const excelData = data.map((reg: any, index: number) => ({
+            Name: reg.fullName ?? `N/A (${index + 1})`,
+            Gender: reg.gender ?? 'N/A',
+            City: reg.city ?? 'N/A',
+            Company: reg.companyName ?? 'N/A',
+            Email: reg.email ?? 'N/A',
+            Phone: reg.phoneNo ?? 'N/A',
+            Event: reg.eventTitle ?? selectedEvent?.eventTitle ?? 'N/A',
+            Status: 'Confirmed',
+          }));
+
+          const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(excelData);
+          const workbook: XLSX.WorkBook = {
+            Sheets: { Registrations: worksheet },
+            SheetNames: ['Registrations'],
+          };
+
+          const excelBuffer: any = XLSX.write(workbook, {
+            bookType: 'xlsx',
+            type: 'array',
+          });
+
+          const blob = new Blob([excelBuffer], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+          });
+
+          const fileName = selectedEvent
+            ? `${selectedEvent.eventTitle.replace(
+              /\s+/g,
+              '_'
+            )}_Registrations.xlsx`
+            : 'Registrations.xlsx';
+
+          saveAs(blob, fileName);
+
+          await this.alerts.fire({
+            icon: 'success',
+            title: 'Export Complete',
+            text: `${excelData.length} records exported successfully.`,
+            timer: 2000,
+            showConfirmButton: false,
+          });
+        },
+        error: async () => {
+          await this.alerts.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to export registrations. Please try again later.',
+          });
+        },
+      });
   }
 
   getFileName(url: string): string {
     return url?.split('/').pop() || '';
   }
-
-  selectedReceiptLink: string | null = null;
 
   openReceipt(link: string) {
     this.selectedReceiptLink = link;
@@ -194,11 +276,11 @@ export class AdminPageComponent implements OnInit {
     this.selectedReceiptLink = null;
   }
 
-  downloadReceipt(event: MouseEvent) {
+  async downloadReceipt(event: MouseEvent) {
     event.stopPropagation();
 
     if (!this.selectedReceiptLink) {
-      Swal.fire({
+      await this.alerts.fire({
         icon: 'warning',
         title: 'No Receipt Selected',
         text: 'Please select a receipt to download.',
@@ -213,7 +295,7 @@ export class AdminPageComponent implements OnInit {
         }
         return response.blob();
       })
-      .then((blob) => {
+      .then(async (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -226,7 +308,7 @@ export class AdminPageComponent implements OnInit {
         a.remove();
         window.URL.revokeObjectURL(url);
 
-        Swal.fire({
+        await this.alerts.fire({
           icon: 'success',
           title: 'Downloaded!',
           text: 'The receipt has been downloaded successfully.',
@@ -234,9 +316,9 @@ export class AdminPageComponent implements OnInit {
           showConfirmButton: false,
         });
       })
-      .catch((error) => {
+      .catch(async (error) => {
         console.error('Download failed:', error);
-        Swal.fire({
+        await this.alerts.fire({
           icon: 'error',
           title: 'Download Failed',
           text: 'Unable to download receipt. Please try again later.',

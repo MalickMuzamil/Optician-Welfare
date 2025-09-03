@@ -1,3 +1,67 @@
-.title {
-  color: #003366;
+.oap-modal {
+  background: var(--oap-card);
+  color: var(--oap-text-dark);
+  border: 1px solid var(--oap-card-border);
+  border-radius: .75rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, .08);
+}
+
+.oap-logo {
+  height: 60px;
+}
+
+.modal-title {
+  color: var(--oap-text-dark);
+}
+
+.form-label {
+  color: var(--oap-text-dark);
+}
+
+.form-control {
+  background: var(--oap-card);
+  color: var(--oap-text-dark);
+  border: 1px solid var(--oap-card-border);
+  border-radius: .5rem;
+  box-shadow: none;
+}
+
+.form-control:focus {
+  border-color: transparent;
+  outline: 0;
+  box-shadow: 0 0 0 .25rem rgba(0, 0, 0, .04);
+}
+
+.btn-oap {
+  background: var(--oap-gradient);
+  color: #fff !important;
+  border: none;
+  border-radius: .5rem;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  padding: .5rem 1.25rem;
+  transition: opacity .2s ease;
+  font-family: inherit !important;
+}
+
+.btn-oap:hover,
+.btn-oap:focus {
+  opacity: .92;
+}
+
+.oap-footer-link {
+  color: var(--oap-text-dark) !important;
+  text-decoration: none;
+  transition: opacity .2s ease, background .2s ease, -webkit-text-fill-color .2s ease;
+  border-bottom: none !important;
+}
+
+.oap-footer-link:hover,
+.oap-footer-link:focus {
+  background: var(--oap-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 1;
+  text-decoration: none;
+  border-bottom: none !important;
 }

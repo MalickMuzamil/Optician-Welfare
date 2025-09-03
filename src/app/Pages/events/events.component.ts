@@ -5,8 +5,7 @@ import { GeneralService } from '../../shared/general.service';
 import { PaginationComponent } from '../../Components/pagination/pagination.component';
 import { FormsModule } from '@angular/forms';
 import { EventModalComponent } from '../../Components/Modals/event-modal/event-modal.component';
-import { DailogBoxComponent } from '../../Components/dailog-box/dailog-box.component';
-import Swal from 'sweetalert2';
+import { LazyAlertService } from '../../shared/lazy-alert';
 
 declare var bootstrap: any;
 
@@ -19,13 +18,13 @@ declare var bootstrap: any;
     PaginationComponent,
     FormsModule,
     EventModalComponent,
-    DailogBoxComponent,
   ],
   templateUrl: './events.component.html',
   styleUrls: ['./events.component.css'],
 })
 export class EventsComponent implements OnInit {
   events: any[] = [];
+  kinds: string[] = [];
   filteredEvents: any[] = [];
   latestEvent: any = null;
   currentPage = 1;
@@ -35,7 +34,10 @@ export class EventsComponent implements OnInit {
   showDeleteModal = false;
   eventToDelete: any = null;
 
-  constructor(private generalService: GeneralService) {}
+  constructor(
+    private generalService: GeneralService,
+    private alerts: LazyAlertService
+  ) { }
 
   ngOnInit(): void {
     this.loadEvents(1, 10);
@@ -43,15 +45,19 @@ export class EventsComponent implements OnInit {
 
   loadEvents(page: number, size: number) {
     const payload: any = { page, size };
-    console.log('Loading events for page:', page);
 
     this.generalService.post('/events/getLatestEvents', payload).subscribe({
       next: (response: any) => {
         this.events = response.payload?.items || [];
         this.filteredEvents = [...this.events];
+
         this.totalPages = response.payload?.totalPages || 1;
         this.currentPage = page;
-        console.log('Events loaded:', this.events);
+
+        const allKinds = this.events.map((e) => e.kind).filter((k) => !!k);
+        this.kinds = Array.from(new Set(allKinds));
+
+        console.log('Kinds in EventsComponent:', this.kinds);
       },
       error: (err: any) => {
         console.error('Error loading events:', err);
@@ -111,43 +117,49 @@ export class EventsComponent implements OnInit {
     this.selectedEvent = null;
   }
 
-  deleteEvent(event: any) {
+  async deleteEvent(event: any) {
     console.log('Delete clicked for event id:', event.eventId || event.id);
 
-    Swal.fire({
+    const confirmed = await this.alerts.confirm({
       title: 'Delete Confirmation',
       text: 'Are you sure you want to delete this event?',
       icon: 'warning',
-      showCancelButton: true,
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
       confirmButtonColor: '#d33',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.handleDeleteConfirm(event);
-      }
     });
-  }
 
-  handleDeleteConfirm(event: any) {
-    const id = event.eventId || event.id;
-    this.generalService
-      .delete(`/events/deleteEvent/${id}`, {}) 
-      .subscribe({
-        next: () => {
+    if (confirmed) {
+      const id = event.eventId || event.id;
+      this.generalService.delete(`/events/deleteEvent/${id}`, {}).subscribe({
+        next: async () => {
           this.events = this.events.filter((e) => e !== event);
           this.filteredEvents = this.filteredEvents.filter((e) => e !== event);
-          Swal.fire('Deleted!', 'Event has been deleted.', 'success');
+
+          await this.alerts.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: 'Event has been deleted.',
+            timer: 2000,
+            showConfirmButton: false,
+          });
+
           console.log('Event deleted successfully');
         },
-        error: (err) => {
+        error: async (err) => {
           console.error('Failed to delete event:', err);
           const serverMessage =
             err?.error?.errors?.[0]?.debugMessage ||
             'Failed to delete event. Please try again.';
-          Swal.fire('Error', serverMessage, 'error');
+
+          await this.alerts.fire({
+            icon: 'error',
+            title: 'Error',
+            text: serverMessage,
+          });
         },
       });
+    }
   }
 
   handleDeleteCancel() {

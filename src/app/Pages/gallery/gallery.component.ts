@@ -9,19 +9,20 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink],
   templateUrl: './gallery.component.html',
-  styleUrl: './gallery.component.css'
+  styleUrl: './gallery.component.css',
 })
 export class GalleryComponent {
   images: string[] = [
-    'assets/Carousal/Gallery/Image1.jpeg',
-    'assets/Carousal/Gallery/Image2.jpeg',
-    'assets/Carousal/Gallery/Image3.jpeg',
-    'assets/Carousal/Gallery/Image4.jpeg',
-    'assets/Carousal/Gallery/Image5.jpeg',
-    'assets/Carousal/Gallery/Image6.jpeg',
-    'assets/Carousal/Gallery/Image7.jpeg',
-    'assets/Carousal/Gallery/Image8.jpeg',
-    'assets/Carousal/Gallery/Image9.jpeg',
+    'assets/Carousal/Gallery/Image1.avif',
+    'assets/Carousal/Gallery/Image2.avif',
+    'assets/Carousal/Gallery/Image3.avif',
+    'assets/Carousal/Gallery/Image10.avif',
+    'assets/Carousal/Gallery/Image4.avif',
+    'assets/Carousal/Gallery/Image5.avif',
+    'assets/Carousal/Gallery/Image6.avif',
+    'assets/Carousal/Gallery/Image7.avif',
+    'assets/Carousal/Gallery/Image11.avif',
+    'assets/Carousal/Gallery/Image8.avif',
+    'assets/Carousal/Gallery/Image9.avif',
   ];
-
 }

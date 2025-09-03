@@ -1,0 +1,33 @@
+.btn-oap {
+  background: var(--oap-gradient);
+  color: #fff !important;
+  border: none;
+  border-radius: .5rem;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  padding: .5rem 1.25rem;
+  transition: opacity .2s ease;
+  font-family: inherit !important;
+}
+
+.btn-oap:focus,
+.btn-oap:hover {
+  opacity: .92;
+}
+
+.btn-outline-oap {
+  background: transparent;
+  color: var(--oap-secondary) !important;
+  border: 2px solid var(--oap-secondary);
+  border-radius: .5rem;
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-semibold);
+  padding: .5rem 1.25rem;
+  font-family: inherit !important;
+}
+
+.btn-outline-oap:hover {
+  background: var(--oap-gradient);
+  color: #fff !important;
+  border-color: transparent;
+}

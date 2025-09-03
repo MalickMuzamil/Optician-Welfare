@@ -8,9 +8,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { GeneralService } from '../../../shared/general.service';
 import { Router } from '@angular/router';
-import Swal from 'sweetalert2';
+import { LazyAlertService } from '../../../shared/lazy-alert';
 
-declare var bootstrap: any;
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-login-modal',
@@ -26,8 +26,9 @@ export class LoginModalComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private generalService: GeneralService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private alerts: LazyAlertService
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -42,7 +43,7 @@ export class LoginModalComponent implements OnInit {
       const credentials = this.loginForm.value;
 
       this.generalService.post('/user/login', credentials).subscribe({
-        next: (res) => {
+        next: async (res) => {
           console.log('Login success:', res);
 
           const userPayload = res?.payload;
@@ -53,13 +54,20 @@ export class LoginModalComponent implements OnInit {
           this.loginForm.reset();
           this.closeModal();
 
+          await this.alerts.fire({
+            title: 'Login Successful',
+            text: 'Welcome back!',
+            icon: 'success',
+            confirmButtonColor: '#28a745',
+          });
+
           this.router.navigate(['/registrations']);
         },
 
-        error: (err) => {
+        error: async (err) => {
           console.error('Login error:', err);
 
-          Swal.fire({
+          await this.alerts.fire({
             title: 'Login Failed',
             text: 'Invalid credentials or server error. Please try again.',
             icon: 'error',
@@ -76,10 +84,21 @@ export class LoginModalComponent implements OnInit {
   closeModal(): void {
     const modalElement = document.getElementById('loginModal');
     if (modalElement) {
-      const modalInstance = bootstrap.Modal.getInstance(modalElement);
-      if (modalInstance) {
-        modalInstance.hide();
+      let modalInstance = Modal.getInstance(modalElement);
+
+      if (!modalInstance) {
+        modalInstance = new Modal(modalElement);
+      }
+
+      modalInstance.hide();
+
+      modalElement.classList.remove('show');
+      document.body.classList.remove('modal-open');
+      const backdrops = document.getElementsByClassName('modal-backdrop');
+      while (backdrops.length > 0) {
+        backdrops[0].parentNode?.removeChild(backdrops[0]);
       }
     }
   }
+
 }
