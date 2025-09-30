@@ -20,6 +20,8 @@ import {
   of,
 } from 'rxjs';
 import { SignupModalComponent } from '../Modals/signup-modal/signup-modal.component';
+import { NgOptimizedImage } from '@angular/common';
+
 
 declare const bootstrap: any;
 
@@ -66,7 +68,7 @@ type Resource = {
 @Component({
   selector: 'app-about',
   standalone: true,
-  imports: [CommonModule, RouterLink, SignupModalComponent],
+  imports: [CommonModule, RouterLink, SignupModalComponent, NgOptimizedImage],
   templateUrl: './about.component.html',
   styleUrls: ['./about.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

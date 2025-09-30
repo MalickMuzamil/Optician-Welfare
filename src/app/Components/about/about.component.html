@@ -84,32 +84,45 @@
 
       <h3 class="title mb-4 mt-5 logo-text" id="leadership">Voices of Leadership</h3>
       <div class="row row-cols-1 row-cols-md-3 g-3">
+        <!-- Founder 1 -->
         <div class="col text-center">
           <div class="founder-img-wrapper mb-2">
-            <img src="assets/FounderImages/Founder1.avif" alt="Khalid Sohail Gulzari" loading="lazy" />
+            <img ngSrc="assets/FounderImages/Founder1.avif" width="393" height="635" alt="Khalid Sohail Gulzari" />
           </div>
           <p class="mb-1 fw-semibold">Khalid Sohail Gulzari</p>
           <p class="mb-1 text-muted">Chairman</p>
-          <p class="fst-italic">“It is an honor to lead this esteemed body. We take pride in being a global
-            representative for opticians.”</p>
+          <p class="fst-italic">
+            “It is an honor to lead this esteemed body. We take pride in being a global
+            representative for opticians.”
+          </p>
         </div>
+
+        <!-- Founder 3 -->
         <div class="col text-center">
           <div class="founder-img-wrapper mb-2">
-            <img src="assets/FounderImages/Founder3.avif" alt="Muhammad Safdar" loading="lazy" />
+            <img ngSrc="assets/FounderImages/Founder3.avif" width="408" height="310" alt="Muhammad Safdar"
+              loading="lazy" />
           </div>
           <p class="mb-1 fw-semibold">Muhammad Safdar</p>
           <p class="mb-1 text-muted">Senior Vice Chairman</p>
-          <p class="fst-italic">“Our commitment to independent selection empowers our community. We champion
-            excellence in eye care.”</p>
+          <p class="fst-italic">
+            “Our commitment to independent selection empowers our community. We champion
+            excellence in eye care.”
+          </p>
         </div>
+
+        <!-- Founder 2 -->
         <div class="col text-center">
           <div class="founder-img-wrapper mb-2">
-            <img src="assets/FounderImages/Founder2.avif" alt="Ali Mudassir" loading="lazy" />
+            <img ngSrc="assets/FounderImages/Founder2.avif" width="408" height="612" alt="Ali Mudassir"
+              loading="lazy" />
           </div>
           <p class="mb-1 fw-semibold">Ali Mudassir</p>
           <p class="mb-1 text-muted">Vice Chairman</p>
-          <p class="fst-italic">“We continue organizational growth and collaboration to shape a brighter future
-            for our community.”</p>
+          <p class="fst-italic">
+            “We continue organizational growth and collaboration to shape a brighter future
+            for our community.”
+          </p>
         </div>
       </div>
 
@@ -118,20 +131,27 @@
         <div class="row g-3">
           <div class="col-12 col-md-4">
             <div class="expo-highlight">
-              <img src="assets/Carousal/Gallery/Image4.avif" alt="Expo 2024 Image 1" loading="lazy" />
+              <img ngSrc="assets/Carousal/Gallery/Image4.avif" width="1500" height="1000" alt="Expo 2024 Image 1"
+                loading="lazy" />
             </div>
           </div>
+
           <div class="col-12 col-md-4">
             <div class="expo-highlight">
-              <img src="assets/Carousal/Gallery/Image2.avif" alt="Expo 2024 Image 2" loading="lazy" />
+              <img ngSrc="assets/Carousal/Gallery/Image2.avif" width="1500" height="1000" alt="Expo 2024 Image 2"
+                loading="lazy" />
             </div>
           </div>
+
           <div class="col-12 col-md-4">
             <div class="expo-highlight">
-              <img src="assets/Carousal/Gallery/Image3.avif" alt="Expo 2024 Image 3" loading="lazy" />
+              <img ngSrc="assets/Carousal/Gallery/Image3.avif" width="1500" height="1000" alt="Expo 2024 Image 3"
+                loading="lazy" />
             </div>
           </div>
         </div>
+
+
         <div class="text-center mt-4">
           <a [routerLink]="['/gallery']" class="btn btn-outline-oap">Show More</a>
         </div>
@@ -157,7 +177,7 @@
                       <span><i class="bi bi-hdd-stack me-1"></i>{{ formatSize(res.sizeBytes) }}</span>
                       <span><i class="bi bi-clock-history me-1"></i>{{ formatDate(res.updatedAt) }}</span>
                     </div>
-                    <div class="event-actions d-flex gap-2">
+                    <div class="event-actions d-flex flex-row flex-nowrap gap-2">
                       <a class="btn btn-outline-oap" [href]="res.viewUrl || res.url" target="_blank" rel="noopener">
                         <i class="bi bi-eye me-1"></i> View
                       </a>
@@ -183,138 +203,139 @@
     </div>
 
     <aside class="col-lg-4 col-12 mt-5 mt-lg-0">
-  <div class="sidebar-oap">
-    <!-- Latest Update -->
-    <div class="latest-update text-center">
-      <h5 class="sidebar-title">Latest Update</h5>
-      <ng-container *ngIf="featuredLatestEvent$ | async as latest; else noEventTemplate">
-        <div class="latest-update-card position-relative">
-          <!-- Badge -->
-          <div class="badge-container">
-            <span class="badge rounded-pill px-3 py-2" [ngClass]="latest?.paid ? 'badge-paid' : 'badge-free'">
-              {{ latest?.paid ? 'Paid' : 'Free' }}
-            </span>
-          </div>
+      <div class="sidebar-oap">
+        <!-- Latest Update -->
+        <div class="latest-update text-center">
+          <h5 class="sidebar-title">Latest Update</h5>
+          <ng-container *ngIf="featuredLatestEvent$ | async as latest; else noEventTemplate">
+            <div class="latest-update-card position-relative">
+              <!-- Badge -->
+              <div class="badge-container">
+                <span class="badge rounded-pill px-3 py-2" [ngClass]="latest?.paid ? 'badge-paid' : 'badge-free'">
+                  {{ latest?.paid ? 'Paid' : 'Free' }}
+                </span>
+              </div>
 
-          <!-- Title -->
-          <h4 class="mb-2 fw-semibold text-start title-with-badge">
-            {{ latest?.title || 'Upcoming Event' }}
-          </h4>
+              <!-- Title -->
+              <h4 class="mb-2 fw-semibold text-start title-with-badge">
+                {{ latest?.title || 'Upcoming Event' }}
+              </h4>
 
-          <!-- Date/Time -->
-          <div class="d-flex small mb-2">
-            <i class="bi bi-calendar-event me-2"></i>
-            <div>
-              <div>{{ getDateRange(latest?.eventDateFrom ?? '', latest?.eventDateTo ?? '') }}</div>
-              <div *ngIf="latest?.eventTimeFrom || latest?.eventTimeTo">
-                {{ getTimeRange(latest?.eventDateFrom ?? '', latest?.eventDateTo ?? '', latest?.eventTimeFrom ?? '',
-                latest?.eventTimeTo ?? '') }}
+              <!-- Date/Time -->
+              <div class="d-flex small mb-2">
+                <i class="bi bi-calendar-event me-2"></i>
+                <div>
+                  <div>{{ getDateRange(latest?.eventDateFrom ?? '', latest?.eventDateTo ?? '') }}</div>
+                  <div *ngIf="latest?.eventTimeFrom || latest?.eventTimeTo">
+                    {{ getTimeRange(latest?.eventDateFrom ?? '', latest?.eventDateTo ?? '', latest?.eventTimeFrom ?? '',
+                    latest?.eventTimeTo ?? '') }}
+                  </div>
+                </div>
+              </div>
+
+              <!-- Location -->
+              <div class="d-flex small mb-2">
+                <i class="bi bi-geo-alt-fill me-2"></i>
+                <span>{{ latest?.address || '' }}</span>
+              </div>
+
+              <!-- Countdown -->
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-clock me-2"></i>
+                  <span>Starts In</span>
+                </div>
+                <div>{{ (countdown$ | async) || '' }}</div>
+              </div>
+
+              <!-- Button -->
+              <button class="btn btn-oap w-100" type="button" (click)="openSignupModal(latest)">
+                <i class="bi bi-check2-circle me-1"></i> Register Now
+              </button>
+            </div>
+          </ng-container>
+
+          <ng-template #noEventTemplate>
+            <div class="latest-update-card position-relative">
+              <h4 class="mb-2 fw-semibold text-start">No featured event</h4>
+              <p class="mb-2 text-start">Check back soon.</p>
+              <div class="placeholder-wave">
+                <span class="placeholder col-6"></span>
+                <span class="placeholder col-4"></span>
+                <span class="placeholder col-8"></span>
               </div>
             </div>
-          </div>
-
-          <!-- Location -->
-          <div class="d-flex small mb-2">
-            <i class="bi bi-geo-alt-fill me-2"></i>
-            <span>{{ latest?.address || '' }}</span>
-          </div>
-
-          <!-- Countdown -->
-          <div class="d-flex justify-content-between align-items-center mb-3">
-            <div class="d-flex align-items-center">
-              <i class="bi bi-clock me-2"></i>
-              <span>Starts In</span>
-            </div>
-            <div>{{ (countdown$ | async) || '' }}</div>
-          </div>
-
-          <!-- Button -->
-          <button class="btn btn-oap w-100" type="button" (click)="openSignupModal(latest)">
-            <i class="bi bi-check2-circle me-1"></i> Register Now
-          </button>
+          </ng-template>
         </div>
-      </ng-container>
 
-      <ng-template #noEventTemplate>
-        <div class="latest-update-card position-relative">
-          <h4 class="mb-2 fw-semibold text-start">No featured event</h4>
-          <p class="mb-2 text-start">Check back soon.</p>
-          <div class="placeholder-wave">
-            <span class="placeholder col-6"></span>
-            <span class="placeholder col-4"></span>
-            <span class="placeholder col-8"></span>
-          </div>
+        <!-- Map -->
+        <div class="map-card">
+          <iframe class="map-embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.682160276789!2d73.00749981521027!3d33.696958847361246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38df958a0e9c67f1%3A0x605877eec01098be!2sF-10%20Markaz%2C%20Islamabad!5e0!3m2!1sen!2s!4v1711587972611!5m2!1sen!2s"></iframe>
         </div>
-      </ng-template>
-    </div>
 
-    <!-- Map -->
-    <div class="map-card">
-      <iframe class="map-embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.682160276789!2d73.00749981521027!3d33.696958847361246!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x38df958a0e9c67f1%3A0x605877eec01098be!2sF-10%20Markaz%2C%20Islamabad!5e0!3m2!1sen!2s!4v1711587972611!5m2!1sen!2s"></iframe>
-    </div>
-
-    <!-- Upcoming Events -->
-    <div>
-      <h5 class="sidebar-title mb-3">Upcoming Events</h5>
-      <ng-container *ngIf="(upcomingEvents$ | async) as events; else comingSoon">
-        <div class="events-stack">
-          <div class="event-card" *ngFor="let event of (events | slice:0:3); trackBy: trackByEventId">
-            <div class="title-row text-truncate mb-1">{{ event.title }}</div>
-            <div class="event-meta mb-2">
-              <i class="bi bi-geo-alt-fill"></i>
-              <span class="address line-clamp-2">{{ event.address }}</span>
-              <i class="bi bi-calendar-event"></i>
-              <div>
-                <div>{{ getDateRange(event?.eventDateFrom ?? '', event?.eventDateTo ?? '') }}</div>
-                <div *ngIf="event?.eventTimeFrom || event?.eventTimeTo" class="fw-medium">
-                  {{ getTimeRange(event?.eventDateFrom ?? '', event?.eventDateTo ?? '', event?.eventTimeFrom ?? '',
-                  event?.eventTimeTo ?? '') }}
+        <!-- Upcoming Events -->
+        <div>
+          <h5 class="sidebar-title mb-3">Upcoming Events</h5>
+          <ng-container *ngIf="(upcomingEvents$ | async) as events; else comingSoon">
+            <div class="events-stack">
+              <div class="event-card" *ngFor="let event of (events | slice:0:3); trackBy: trackByEventId">
+                <div class="title-row text-truncate mb-1">{{ event.title }}</div>
+                <div class="event-meta mb-2">
+                  <i class="bi bi-geo-alt-fill"></i>
+                  <span class="address line-clamp-2">{{ event.address }}</span>
+                  <i class="bi bi-calendar-event"></i>
+                  <div>
+                    <div>{{ getDateRange(event?.eventDateFrom ?? '', event?.eventDateTo ?? '') }}</div>
+                    <div *ngIf="event?.eventTimeFrom || event?.eventTimeTo" class="fw-medium">
+                      {{ getTimeRange(event?.eventDateFrom ?? '', event?.eventDateTo ?? '', event?.eventTimeFrom ?? '',
+                      event?.eventTimeTo ?? '') }}
+                    </div>
+                  </div>
+                </div>
+                <div class="event-actions">
+                  <button class="btn btn-oap d-inline-flex align-items-center justify-content-center"
+                    (click)="openSignupModal(event)">
+                    <i class="bi bi-check2-circle me-2"></i> Register Now
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="event-actions">
-              <button class="btn btn-oap d-inline-flex align-items-center justify-content-center" (click)="openSignupModal(event)">
-                <i class="bi bi-check2-circle me-2"></i> Register Now
-              </button>
+          </ng-container>
+          <ng-template #comingSoon>
+            <div class="event-card text-center coming-soon">
+              <h5 class="mb-0 logo-text">Opticians Training</h5>
+              <p class="mb-0">Coming soon...</p>
             </div>
+          </ng-template>
+        </div>
+
+        <!-- Contact -->
+        <div class="contact-section">
+          <h5 class="sidebar-title mb-3">Contact Us</h5>
+          <div class="contact-card">
+            <ul class="contact-list">
+              <li class="contact-item">
+                <i class="bi bi-envelope-fill contact-icon"></i>
+                <a href="mailto:Info&#64;opticians.pk" class="contact-link">Info&#64;opticians.pk</a>
+              </li>
+              <li class="contact-item">
+                <i class="bi bi-telephone-fill contact-icon"></i>
+                <a href="tel:0516107576" class="contact-link">051-6107576</a>
+              </li>
+              <li class="contact-item">
+                <i class="bi bi-geo-alt-fill contact-icon"></i>
+                <a href="https://www.google.com/maps/search/?api=1&query=Office+No.6,+2nd+Floor+Capital+Trade+Centre,+F-10+Markaz,+Islamabad,+Pakistan"
+                  target="_blank" rel="noopener" class="contact-link">
+                  Office No. 6, 2nd Floor Capital Trade Centre, F-10 Markaz, Islamabad, Pakistan
+                </a>
+              </li>
+            </ul>
           </div>
         </div>
-      </ng-container>
-      <ng-template #comingSoon>
-        <div class="event-card text-center coming-soon">
-          <h5 class="mb-0 logo-text">Opticians Training</h5>
-          <p class="mb-0">Coming soon...</p>
-        </div>
-      </ng-template>
-    </div>
 
-    <!-- Contact -->
-    <div class="contact-section">
-      <h5 class="sidebar-title mb-3">Contact Us</h5>
-      <div class="contact-card">
-        <ul class="contact-list">
-          <li class="contact-item">
-            <i class="bi bi-envelope-fill contact-icon"></i>
-            <a href="mailto:Info&#64;opticians.pk" class="contact-link">Info&#64;opticians.pk</a>
-          </li>
-          <li class="contact-item">
-            <i class="bi bi-telephone-fill contact-icon"></i>
-            <a href="tel:0516107576" class="contact-link">051-6107576</a>
-          </li>
-          <li class="contact-item">
-            <i class="bi bi-geo-alt-fill contact-icon"></i>
-            <a href="https://www.google.com/maps/search/?api=1&query=Office+No.6,+2nd+Floor+Capital+Trade+Centre,+F-10+Markaz,+Islamabad,+Pakistan"
-              target="_blank" rel="noopener" class="contact-link">
-              Office No. 6, 2nd Floor Capital Trade Centre, F-10 Markaz, Islamabad, Pakistan
-            </a>
-          </li>
-        </ul>
       </div>
-    </div>
-
-  </div>
-</aside>
+    </aside>
 
 
   </div>

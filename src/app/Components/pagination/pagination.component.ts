@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './pagination.component.html',
-  styleUrls: ['./pagination.component.css']
+  styleUrls: ['./pagination.component.css'],
 })
 export class PaginationComponent {
   @Input() currentPage: number = 1;
@@ -16,7 +16,20 @@ export class PaginationComponent {
 
   changePage(page: number): void {
     if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
-       this.pageChange.emit(page); 
+      this.pageChange.emit(page);
     }
+  }
+
+  get visiblePages(): number[] {
+    let start = Math.max(this.currentPage - 2, 1);
+    let end = Math.min(start + 4, this.totalPages);
+
+    start = Math.max(end - 4, 1);
+
+    const pages = [];
+    for (let i = start; i <= end; i++) {
+      pages.push(i);
+    }
+    return pages;
   }
 }

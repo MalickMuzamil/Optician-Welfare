@@ -3,11 +3,7 @@
 <section class="gallery-wrapper">
   <div class="container">
     <div class="d-flex align-items-center mb-5">
-      <a
-        routerLink="/"
-        class="text-decoration-none text-primary me-3"
-        style="font-size: 1.5rem"
-      >
+      <a routerLink="/" class="text-decoration-none text-primary me-3" style="font-size: 1.5rem">
         <i class="bi bi-arrow-left title"></i>
       </a>
       <div class="flex-grow-1 text-center">
@@ -21,14 +17,11 @@
     <div class="row g-4 mb-5">
       <div class="col-12 col-sm-6 col-md-4" *ngFor="let img of images">
         <div class="border rounded overflow-hidden shadow-sm h-100">
-          <img
-            [src]="img"
-            alt="Gallery Image"
-            class="img-fluid w-100"
-            style="object-fit: cover; height: 350px"
-          />
+          <img [ngSrc]="img" width="600" height="350" alt="Gallery Image" class="img-fluid w-100"
+            style="object-fit: cover; height: 350px" />
         </div>
       </div>
+
     </div>
   </div>
 </section>

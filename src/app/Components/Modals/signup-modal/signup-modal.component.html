@@ -76,12 +76,12 @@
                   <div class="description-wrapper mb-2">
                     <p
                       class="card-text text-muted mb-1"
-                      [class.truncated]="!showFullDescription && !isDesktop()"
+                      [class.truncated]="!showFullDescription"
                       [innerHTML]="event?.description"
                     ></p>
 
                     <button
-                      *ngIf="event?.description && !isDesktop()"
+                      *ngIf="event?.description"
                       class="btn btn-link p-0 text-muted mx-auto d-block"
                       (click)="toggleDescription()"
                     >
@@ -327,16 +327,27 @@
               </div>
 
               <!-- File Upload (if event is paid) -->
-              <div class="mb-3" *ngIf="latestEvent?.paid">
+              <div class="mb-3 custom-file-wrapper" *ngIf="latestEvent?.paid">
                 <input
                   type="file"
-                  class="form-control"
                   id="imageInput"
                   #imageInput
                   (change)="onFileSelected($event)"
                   accept="image/*"
-                  [class.is-invalid]="fileInvalid()"
+                  hidden
                 />
+
+                <label
+                  for="imageInput"
+                  class="custom-file-label"
+                  [ngClass]="{ 'is-invalid': fileInvalid() }"
+                >
+                  <span class="choose-btn">Choose File</span>
+                  <span class="file-name">
+                    {{ file ? file.name : "Payment Receipt required" }}
+                  </span>
+                </label>
+
                 <div
                   *ngIf="fileHasError('required')"
                   class="invalid-feedback d-block"
@@ -351,6 +362,49 @@
                 </div>
                 <div
                   *ngIf="fileHasError('size')"
+                  class="invalid-feedback d-block"
+                >
+                  Max size 5MB.
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <div class="mb-3 custom-file-wrapper">
+                  <input
+                    type="file"
+                    id="visitingCardInput"
+                    (change)="onVisitingCardSelected($event)"
+                    accept="image/*"
+                    capture="environment"
+                    hidden
+                  />
+
+                  <label for="visitingCardInput" class="custom-file-label">
+                    <span class="choose-btn">Choose File</span>
+                    <span class="file-name">
+                      {{
+                        visitingCardFile
+                          ? visitingCardFile.name
+                          : "Visiting Card required"
+                      }}
+                    </span>
+                  </label>
+                </div>
+
+                <div
+                  *ngIf="visitingCardHasError('required')"
+                  class="invalid-feedback d-block text-danger"
+                >
+                  Visiting Card Image is required.
+                </div>
+                <div
+                  *ngIf="visitingCardHasError('type')"
+                  class="invalid-feedback d-block"
+                >
+                  Only image files are allowed.
+                </div>
+                <div
+                  *ngIf="visitingCardHasError('size')"
                   class="invalid-feedback d-block"
                 >
                   Max size 5MB.

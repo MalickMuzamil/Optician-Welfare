@@ -1,6 +1,18 @@
-.hero-bg {
-  width: 100%;      /* fill screen width */
-  height: auto;     /* auto-scale height */
+.hero-img-contain {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+  max-height: 100vh;
+}
+
+.hero-img-cover {
+  width: 100%;
+  height: 80vh;
   object-fit: cover;
-  aspect-ratio: 16 / 9;  /* keeps proportion across screen sizes */
+}
+
+@media (min-width: 1400px) {
+  .hero-img-cover {
+    height: 90vh;
+  }
 }

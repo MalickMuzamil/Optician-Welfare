@@ -106,7 +106,7 @@ export class SignupModalComponent implements OnInit, AfterViewInit {
     ]),
   });
 
-  private file: File | null = null;
+  file: File | null = null;
   private fileTouched = false;
   submitting = false;
   private submitAttempted = false;
@@ -214,11 +214,19 @@ export class SignupModalComponent implements OnInit, AfterViewInit {
       credentials.gender = String(credentials.gender).toUpperCase();
     if (evt.eventId != null) credentials.eventId = evt.eventId;
     const formData = new FormData();
+
     const jsonBlob = new Blob([JSON.stringify(credentials)], {
       type: 'application/json',
     });
+
     formData.append('EventRegistrationDto', jsonBlob);
-    if (evt.file) formData.append('image', evt.file);
+
+    if (evt.file) formData.append('receipt', evt.file);
+    
+    if (this.visitingCardFile) {
+      formData.append('visitingCard', this.visitingCardFile);
+    }
+
     try {
       await firstValueFrom(
         this.http.post(
@@ -241,7 +249,7 @@ export class SignupModalComponent implements OnInit, AfterViewInit {
           e?.errors?.[0]?.errorPromptMessage ||
           e?.errors?.[0]?.debugMessage ||
           errorMessage;
-      } catch { }
+      } catch {}
       Swal.fire({
         icon: 'error',
         title: 'Oops!',
@@ -379,5 +387,55 @@ export class SignupModalComponent implements OnInit, AfterViewInit {
     }
 
     return '';
+  }
+
+  // -------------------------------
+  // Visiting Card Upload Section
+  // -------------------------------
+
+  @ViewChild('visitingCardInput', { static: false })
+  visitingCardInputRef?: ElementRef<HTMLInputElement>;
+
+  visitingCardFile: File | null = null;
+  private visitingCardTouched = false;
+
+  onVisitingCardSelected(evt: Event): void {
+    const input = evt.target as HTMLInputElement;
+    this.visitingCardFile = input?.files?.[0] ?? null;
+    this.visitingCardTouched = true;
+    this.cdr.markForCheck();
+
+    if (this.visitingCardFile) {
+      console.log('Visiting Card File Selected:', this.visitingCardFile);
+      console.log('Blob size (bytes):', this.visitingCardFile.size);
+      console.log('Blob type:', this.visitingCardFile.type);
+
+      // Optional: check binary preview (debug only)
+      this.visitingCardFile.arrayBuffer().then((buf) => {
+        console.log('Binary length:', buf.byteLength);
+        console.log('First 50 bytes:', new Uint8Array(buf).slice(0, 50));
+      });
+    } else {
+      console.warn('No visiting card file selected.');
+    }
+  }
+
+  visitingCardInvalid(): boolean {
+    if (!this.visitingCardFile)
+      return this.visitingCardTouched || this.submitAttempted;
+    if (!this.visitingCardFile.type?.startsWith('image/')) return true;
+    if (this.visitingCardFile.size > this.MAX_FILE_SIZE) return true;
+    return false;
+  }
+
+  visitingCardHasError(kind: 'required' | 'type' | 'size'): boolean {
+    const active = this.visitingCardTouched || this.submitAttempted;
+    if (kind === 'required') return active && !this.visitingCardFile;
+    if (!this.visitingCardFile) return false;
+    if (kind === 'type')
+      return active && !this.visitingCardFile.type?.startsWith('image/');
+    if (kind === 'size')
+      return active && this.visitingCardFile.size > this.MAX_FILE_SIZE;
+    return false;
   }
 }

@@ -1,17 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavbarComponent } from '../../Components/navbar/navbar.component';
 import { FooterComponent } from '../../Components/footer/footer.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { NgOptimizedImage } from '@angular/common';
 
 @Component({
   selector: 'app-gallery',
   standalone: true,
-  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink],
+  imports: [NavbarComponent, FooterComponent, CommonModule, RouterLink, NgOptimizedImage],
   templateUrl: './gallery.component.html',
   styleUrl: './gallery.component.css',
 })
 export class GalleryComponent {
+
   images: string[] = [
     'assets/Carousal/Gallery/Image1.avif',
     'assets/Carousal/Gallery/Image2.avif',

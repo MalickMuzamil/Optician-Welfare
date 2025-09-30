@@ -1,19 +1,23 @@
 <div class="container-fluid px-0">
-  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000" data-bs-wrap="true">
-    <!-- Indicators -->
+  <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000" data-bs-wrap="true">
     <div class="carousel-indicators">
       <button *ngFor="let _ of slides; let i = index" type="button" [attr.data-bs-target]="'#heroCarousel'"
         [attr.data-bs-slide-to]="i" [class.active]="i === 0" [attr.aria-current]="i === 0 ? 'true' : null"
         [attr.aria-label]="'Slide ' + (i + 1)"></button>
     </div>
 
-    <!-- Slides -->
     <div class="carousel-inner">
       <div class="carousel-item" *ngFor="let s of slides; let i = index" [class.active]="i === 0">
-        <img ngSrc="{{ s.src }}" [width]="s.width" [height]="s.height" [alt]="s.alt" [priority]="i === 0"
-          [attr.sizes]="'(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px'"
+        <img ngSrc="{{ s.src }}" class="d-block w-100 d-lg-none hero-img-contain" [width]="s.width" [height]="s.height"
+          [alt]="s.alt" [priority]="i === 0" [attr.sizes]="'(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px'"
           [attr.fetchpriority]="i === 0 ? 'high' : 'low'" [attr.loading]="i === 0 ? 'eager' : 'lazy'"
           decoding="async" />
+
+        <img ngSrc="{{ s.src }}" class="d-none d-lg-block w-100 hero-img-cover" [width]="s.width" [height]="s.height"
+          [alt]="s.alt" [attr.sizes]="'(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1920px'"
+          [attr.fetchpriority]="'low'" [attr.loading]="'lazy'" decoding="async" />
+
+
       </div>
     </div>
   </div>
