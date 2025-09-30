@@ -1,4 +1,4 @@
-📌 MEAN CRM + eStore + Registration System
+### 📌 MEAN CRM + eStore + Registration System
 <p align="center"> <img src="https://img.shields.io/badge/Built%20With-MEAN%20Stack-blueviolet?style=for-the-badge" /> <img src="https://img.shields.io/badge/Frontend-Angular%20%26%20Bootstrap-orange?style=for-the-badge" /> <img src="https://img.shields.io/badge/Responsive-Yes-brightgreen?style=for-the-badge" /> <img src="https://img.shields.io/badge/License-MIT-blue?style=for-the-badge" /> </p>
 
 ---
