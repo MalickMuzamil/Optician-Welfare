@@ -8,7 +8,7 @@
 This project is a complete enterprise-grade solution built on the MEAN Stack (MongoDB, Express.js, Angular, Node.js).
 It consists of three core applications:
 
-CRM (Customer Relationship Management) – Manage clients, leads, and business operations.
+CRM (Customer Relationship Management) Manage clients, leads, and business operations.
 
 - eStore : A fully functional online store for products & orders.
 
@@ -63,7 +63,7 @@ Follow these steps to run the project locally:
 
 1- Clone the repository
 
-2- git clone https://github.com/YourUsername/mean-crm-estore.git
+2- git clone https://github.com/MalickMuzamil/Optician-Welfare
 
 3- cd mean-crm-estore
 
